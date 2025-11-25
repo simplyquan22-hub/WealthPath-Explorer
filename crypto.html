@@ -1,1 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptocurrency | WealthPath Explorer</title>
 
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0b0e12;
+            --text: #e9eef6;
+            --muted: #9aa4b2;
+            --accent: #3b82f6;
+            --border: rgba(255, 255, 255, 0.12);
+            --card-bg: rgba(255, 255, 255, 0.06);
+        }
+
+        /* GLOBAL */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.65;
+            overflow-x: hidden;
+        }
+
+        /* BACKGROUND */
+        .animated-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 25% 15%, #0f172a, #0b0e12 80%);
+            z-index: -2;
+        }
+
+        .orb {
+            position: fixed;
+            width: 300px; height: 300px;
+            border-radius: 50%;
+            filter: blur(130px);
+            opacity: 0.32;
+            animation: float 11s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        .orb.blue { background: #3b82f6; top: 18%; left: 12%; }
+        .orb.gold { background: #facc15; bottom: 10%; right: 10%; }
+
+        @keyframes float {
+            from { transform: translateY(0); }
+            to { transform: translateY(-35px); }
+        }
+
+        /* PAGE WRAPPER */
+        .page-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 110px 22px 80px;
+            text-align: center;
+        }
+
+        /* HEADERS */
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 650px;
+            margin: 0 auto 30px;
+        }
+
+        .blue-divider {
+            width: 130px;
+            border: 0;
+            border-top: 2px solid var(--accent);
+            margin: 22px auto 40px;
+            border-radius: 2px;
+            opacity: 0.85;
+            box-shadow: 0 0 12px rgba(59,130,246,0.45);
+        }
+
+        /* CATEGORY GRID */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 26px;
+        }
+
+        @media (max-width: 700px) {
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* CARD */
+        .category-card {
+            background: var(--card-bg);
+            padding: 22px 22px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow:
+                0 0 16px rgba(59,130,246,0.25),
+                0 0 6px rgba(0,0,0,0.7);
+            transition: 0.25s ease;
+            text-align: left;
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 0 22px rgba(59,130,246,0.6),
+                0 0 10px rgba(0,0,0,0.7);
+            border-color: rgba(59,130,246,0.6);
+        }
+
+        .category-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.35rem;
+            margin-bottom: 8px;
+        }
+
+        .category-description {
+            color: var(--muted);
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+
+        /* TICKER LIST */
+        .ticker-list span {
+            display: inline-block;
+            background: rgba(255,255,255,0.07);
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin: 4px 6px 6px 0;
+            color: #fff;
+            font-size: 0.98rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- BACKGROUND -->
+    <div class="animated-bg"></div>
+    <div class="orb blue"></div>
+    <div class="orb gold"></div>
+
+    <div class="page-wrapper">
+
+        <!-- HEADER -->
+        <h1>Cryptocurrency</h1>
+        <p class="page-subtitle">
+            Crypto is a digital asset class built on blockchain technology.  
+            Here are the major types investors should know.
+        </p>
+
+        <hr class="blue-divider">
+
+        <!-- CATEGORY GRID -->
+        <div class="category-grid">
+
+            <!-- BITCOIN -->
+            <div class="category-card">
+                <div class="category-title">Bitcoin (BTC)</div>
+                <p class="category-description">
+                    The first and largest cryptocurrency. Often seen as digital gold.
+                </p>
+                <div class="ticker-list">
+                    <span>BTC</span><span>IBIT</span><span>FBTC</span><span>BITB</span>
+                </div>
+            </div>
+
+            <!-- ETHEREUM -->
+            <div class="category-card">
+                <div class="category-title">Ethereum (ETH)</div>
+                <p class="category-description">
+                    The main network for smart contracts, apps, DeFi, and NFTs.
+                </p>
+                <div class="ticker-list">
+                    <span>ETH</span><span>ETHE</span><span>ETHW</span>
+                </div>
+            </div>
+
+            <!-- LAYER 1 NETWORKS -->
+            <div class="category-card">
+                <div class="category-title">Major Layer-1 Networks</div>
+                <p class="category-description">
+                    Competing blockchains that offer fast speeds and low fees.
+                </p>
+                <div class="ticker-list">
+                    <span>SOL</span><span>ADA</span><span>AVAX</span><span>DOT</span>
+                </div>
+            </div>
+
+            <!-- STABLECOINS -->
+            <div class="category-card">
+                <div class="category-title">Stablecoins</div>
+                <p class="category-description">
+                    Cryptocurrencies pegged to the U.S. dollar.  
+                    Used for stable value.
+                </p>
+                <div class="ticker-list">
+                    <span>USDT</span><span>USDC</span><span>DAI</span>
+                </div>
+            </div>
+
+            <!-- BLOCKCHAIN ETFs -->
+            <div class="category-card">
+                <div class="category-title">Blockchain ETFs</div>
+                <p class="category-description">
+                    Stock market ETFs that invest in blockchain companies.
+                </p>
+                <div class="ticker-list">
+                    <span>BLOK</span><span>BKCH</span><span>BITQ</span>
+                </div>
+            </div>
+
+            <!-- WEB3 / METAVERSE -->
+            <div class="category-card">
+                <div class="category-title">Web3 & Metaverse ETFs</div>
+                <p class="category-description">
+                    Funds that invest in next-generation internet and digital tech.
+                </p>
+                <div class="ticker-list">
+                    <span>META</span><span>VR</span><span>WEB3</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
