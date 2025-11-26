@@ -14,11 +14,10 @@
             --text: #e9eef6;
             --muted: #9aa4b2;
             --accent: #3b82f6;
-            --border: rgba(255, 255, 255, 0.12);
-            --card-bg: rgba(255, 255, 255, 0.06);
+            --border: rgba(255,255,255,0.12);
+            --card-bg: rgba(255,255,255,0.06);
         }
 
-        /* GLOBAL */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -29,54 +28,51 @@
             overflow-x: hidden;
         }
 
-        /* BACKGROUND */
         .animated-bg {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            inset: 0;
             background: radial-gradient(circle at 25% 15%, #0f172a, #0b0e12 80%);
             z-index: -2;
         }
 
         .orb {
             position: fixed;
-            width: 300px; height: 300px;
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
             filter: blur(130px);
             opacity: 0.32;
             animation: float 11s ease-in-out infinite alternate;
             z-index: -1;
         }
-
         .orb.blue { background: #3b82f6; top: 18%; left: 12%; }
         .orb.gold { background: #facc15; bottom: 10%; right: 10%; }
 
-        @keyframes float {
-            from { transform: translateY(0); }
-            to { transform: translateY(-35px); }
+        @keyframes float { 
+            from { transform: translateY(0); } 
+            to { transform: translateY(-35px); } 
         }
 
-        /* PAGE WRAPPER */
         .page-wrapper {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 110px 22px 80px;
-            text-align: center;
+            padding: 110px 22px 70px;
         }
 
-        /* HEADERS */
         h1 {
             font-family: 'Montserrat', sans-serif;
             font-size: 2.6rem;
             font-weight: 800;
+            text-align: center;
             margin-bottom: 15px;
         }
 
         .page-subtitle {
-            font-size: 1.1rem;
-            color: var(--muted);
-            max-width: 650px;
+            text-align: center;
+            max-width: 680px;
             margin: 0 auto 30px;
+            font-size: 1.08rem;
+            color: var(--muted);
         }
 
         .blue-divider {
@@ -89,151 +85,185 @@
             box-shadow: 0 0 12px rgba(59,130,246,0.45);
         }
 
-        /* CATEGORY GRID */
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 26px;
-        }
-
-        @media (max-width: 700px) {
-            .category-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* CARD */
-        .category-card {
+        .card {
             background: var(--card-bg);
-            padding: 22px 22px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.09);
+            padding: 22px;
+            border-radius: 18px;
+            margin-bottom: 30px;
             box-shadow:
                 0 0 16px rgba(59,130,246,0.25),
                 0 0 6px rgba(0,0,0,0.7);
-            transition: 0.25s ease;
-            text-align: left;
         }
 
-        .category-card:hover {
-            transform: translateY(-4px);
-            box-shadow:
-                0 0 22px rgba(59,130,246,0.6),
-                0 0 10px rgba(0,0,0,0.7);
-            border-color: rgba(59,130,246,0.6);
-        }
-
-        .category-title {
+        .card h2 {
             font-family: 'Montserrat', sans-serif;
             font-size: 1.35rem;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
-        .category-description {
-            color: var(--muted);
+        .card p, .card li {
             font-size: 1rem;
-            margin-bottom: 12px;
+            color: var(--muted);
         }
 
-        /* TICKER LIST */
-        .ticker-list span {
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+
+        .risk-box {
             display: inline-block;
-            background: rgba(255,255,255,0.07);
+            background: rgba(59,130,246,0.2);
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(59,130,246,0.4);
+            color: #fff;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .ticker-grid span {
+            display: inline-block;
+            background: rgba(255,255,255,0.08);
             padding: 6px 10px;
             border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.08);
-            margin: 4px 6px 6px 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin: 4px;
+            font-size: 0.95rem;
             color: #fff;
-            font-size: 0.98rem;
         }
     </style>
+
 </head>
 
 <body>
 
-    <!-- BACKGROUND -->
     <div class="animated-bg"></div>
     <div class="orb blue"></div>
     <div class="orb gold"></div>
 
     <div class="page-wrapper">
 
-        <!-- HEADER -->
         <h1>Commodities</h1>
         <p class="page-subtitle">
-            Commodities are physical goods like gold, oil, or agriculture.  
-            These funds add diversification and behave differently than stocks.
+            Commodities represent real, physical assets — the building blocks of the world.  
+            Gold, oil, agriculture, metals, and energy resources all fall under this category.  
+            They protect your portfolio during inflation and global uncertainty.
         </p>
 
         <hr class="blue-divider">
 
-        <!-- CATEGORY GRID -->
-        <div class="category-grid">
+        <!-- WHAT IT IS -->
+        <div class="card">
+            <h2>What It Is</h2>
+            <p>
+                Commodities are raw materials used across the economy — from energy to food to precious metals.  
+                Unlike stocks (companies) or bonds (loans), commodities reflect real-world supply and demand.
+            </p>
+            <p>
+                They’re often used as a hedge when markets get unstable, especially gold and energy.
+            </p>
+        </div>
 
-            <!-- GOLD -->
-            <div class="category-card">
-                <div class="category-title">Gold</div>
-                <p class="category-description">
-                    A safe-haven asset used for long-term stability.
-                </p>
-                <div class="ticker-list">
-                    <span>GLD</span><span>IAU</span><span>SGOL</span>
-                </div>
+        <!-- HOW IT WORKS -->
+        <div class="card">
+            <h2>How It Works</h2>
+            <p>Commodities move based on:</p>
+            <ul>
+                <li><strong>Supply</strong> — droughts, shortages, mining output, geopolitics</li>
+                <li><strong>Demand</strong> — industry use, technology, global growth</li>
+                <li><strong>Inflation</strong> — rising prices boost commodity value</li>
+                <li><strong>Dollar strength</strong> — commodities fall when the dollar rises</li>
+            </ul>
+            <p>
+                Most commodity investing is done through ETFs — safer and easier than futures contracts.
+            </p>
+        </div>
+
+        <!-- PROS -->
+        <div class="card">
+            <h2>Pros</h2>
+            <ul>
+                <li>✔ Hedge against inflation</li>
+                <li>✔ Low correlation to stocks</li>
+                <li>✔ Protects during market crashes</li>
+                <li>✔ ETFs make it easy for beginners</li>
+            </ul>
+        </div>
+
+        <!-- CONS -->
+        <div class="card">
+            <h2>Cons</h2>
+            <ul>
+                <li>✘ Highly volatile</li>
+                <li>✘ Prices depend on geopolitics and supply shocks</li>
+                <li>✘ No dividends or income</li>
+                <li>✘ Harder to predict than stocks</li>
+            </ul>
+        </div>
+
+        <!-- RISK -->
+        <div class="card">
+            <h2>Risk Level</h2>
+            <p class="risk-box">⭐️⭐️⭐️⭐️ (Higher Risk)</p>
+            <p>
+                Gold = lower risk  
+                Energy = high volatility  
+                Agriculture = seasonal risk  
+                Industrial metals = cyclical
+            </p>
+        </div>
+
+        <!-- TIME HORIZON -->
+        <div class="card">
+            <h2>Time Horizon</h2>
+            <p>
+                Best used as a short–medium term hedge or 5–10% of a long-term portfolio for stability.
+            </p>
+        </div>
+
+        <!-- MISTAKES -->
+        <div class="card">
+            <h2>Beginner Mistakes to Avoid</h2>
+            <ul>
+                <li>❌ Betting too much on energy or oil spikes</li>
+                <li>❌ Ignoring geopolitical effects</li>
+                <li>❌ Not understanding that commodities don’t produce income</li>
+                <li>❌ Buying leveraged commodity ETFs (EXTREMELY risky)</li>
+            </ul>
+        </div>
+
+        <!-- POPULAR COMMODITY TICKERS -->
+        <div class="card">
+            <h2>Popular Commodity ETFs</h2>
+
+            <h3 style="margin-top:15px;">🥇 Gold</h3>
+            <div class="ticker-grid">
+                <span>GLD</span><span>IAU</span><span>SGOL</span><span>BAR</span>
             </div>
 
-            <!-- SILVER -->
-            <div class="category-card">
-                <div class="category-title">Silver</div>
-                <p class="category-description">
-                    A precious metal with both industrial and store-of-value uses.
-                </p>
-                <div class="ticker-list">
-                    <span>SLV</span><span>SIVR</span><span>USLV</span>
-                </div>
+            <h3 style="margin-top:20px;">🥈 Silver</h3>
+            <div class="ticker-grid">
+                <span>SLV</span><span>SIVR</span><span>AGQ</span>
             </div>
 
-            <!-- OIL & ENERGY -->
-            <div class="category-card">
-                <div class="category-title">Oil & Energy</div>
-                <p class="category-description">
-                    Funds that track crude oil, natural gas, and energy markets.
-                </p>
-                <div class="ticker-list">
-                    <span>USO</span><span>XLE</span><span>UNG</span>
-                </div>
+            <h3 style="margin-top:20px;">⛽ Oil & Energy</h3>
+            <div class="ticker-grid">
+                <span>USO</span><span>BNO</span><span>XLE</span><span>VDE</span>
             </div>
 
-            <!-- AGRICULTURE -->
-            <div class="category-card">
-                <div class="category-title">Agriculture</div>
-                <p class="category-description">
-                    Tracks crops like wheat, soybeans, and corn.
-                </p>
-                <div class="ticker-list">
-                    <span>DBA</span><span>CORN</span><span>WEAT</span>
-                </div>
+            <h3 style="margin-top:20px;">🌽 Agriculture</h3>
+            <div class="ticker-grid">
+                <span>DBA</span><span>CORN</span><span>WEAT</span><span>SOYB</span>
             </div>
 
-            <!-- INDUSTRIAL METALS -->
-            <div class="category-card">
-                <div class="category-title">Industrial Metals</div>
-                <p class="category-description">
-                    Metals used in construction and technology.
-                </p>
-                <div class="ticker-list">
-                    <span>DBB</span><span>CPER</span><span>JJC</span>
-                </div>
+            <h3 style="margin-top:20px;">⛏ Industrial Metals</h3>
+            <div class="ticker-grid">
+                <span>PICK</span><span>DBB</span><span>CU</span><span>JJC</span>
             </div>
 
-            <!-- BROAD COMMODITY FUNDS -->
-            <div class="category-card">
-                <div class="category-title">Broad Commodity Funds</div>
-                <p class="category-description">
-                    Diversified exposure to multiple commodities.
-                </p>
-                <div class="ticker-list">
-                    <span>DBC</span><span>PDBC</span><span>BCI</span>
-                </div>
+            <h3 style="margin-top:20px;">🛢 Broad Commodity Funds</h3>
+            <div class="ticker-grid">
+                <span>DBC</span><span>BCI</span><span>CMDY</span><span>PDBC</span>
             </div>
 
         </div>
