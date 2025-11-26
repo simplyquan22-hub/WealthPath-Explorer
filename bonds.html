@@ -14,26 +14,24 @@
             --text: #e9eef6;
             --muted: #9aa4b2;
             --accent: #3b82f6;
-            --border: rgba(255, 255, 255, 0.12);
-            --card-bg: rgba(255, 255, 255, 0.06);
+            --border: rgba(255,255,255,0.12);
+            --card-bg: rgba(255,255,255,0.06);
         }
 
-        /* GLOBAL */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background: var(--bg);
             color: var(--text);
             font-family: 'Inter', sans-serif;
-            line-height: 1.65;
             overflow-x: hidden;
+            line-height: 1.65;
         }
 
         /* BACKGROUND */
         .animated-bg {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            inset: 0;
             background: radial-gradient(circle at 25% 15%, #0f172a, #0b0e12 80%);
             z-index: -2;
         }
@@ -47,193 +45,223 @@
             animation: float 11s ease-in-out infinite alternate;
             z-index: -1;
         }
-
-        .orb.blue { background: #3b82f6; top: 18%; left: 12%; }
-        .orb.gold { background: #facc15; bottom: 10%; right: 10%; }
+        .orb.blue { background:#3b82f6; top:18%; left:12%; }
+        .orb.gold { background:#facc15; bottom:10%; right:10%; }
 
         @keyframes float {
             from { transform: translateY(0); }
             to { transform: translateY(-35px); }
         }
 
-        /* PAGE WRAPPER */
+        /* WRAPPER */
         .page-wrapper {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 110px 22px 80px;
-            text-align: center;
+            padding: 110px 22px 70px;
         }
 
-        /* HEADERS */
         h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2.6rem;
-            font-weight: 800;
-            margin-bottom: 15px;
+            font-family:'Montserrat',sans-serif;
+            font-size:2.6rem;
+            font-weight:800;
+            text-align:center;
+            margin-bottom:15px;
         }
 
         .page-subtitle {
-            font-size: 1.1rem;
-            color: var(--muted);
-            max-width: 650px;
-            margin: 0 auto 30px;
+            text-align:center;
+            max-width:650px;
+            margin:0 auto 30px;
+            color:var(--muted);
+            font-size:1.08rem;
         }
 
         .blue-divider {
-            width: 130px;
-            border: 0;
-            border-top: 2px solid var(--accent);
-            margin: 22px auto 40px;
-            border-radius: 2px;
-            opacity: 0.85;
-            box-shadow: 0 0 12px rgba(59,130,246,0.45);
+            width:130px;
+            border:0;
+            border-top:2px solid var(--accent);
+            margin:22px auto 40px;
+            opacity:0.85;
+            border-radius:2px;
+            box-shadow:0 0 12px rgba(59,130,246,0.45);
         }
 
-        /* CATEGORY GRID */
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 26px;
-        }
-
-        @media (max-width: 700px) {
-            .category-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* CARD */
-        .category-card {
-            background: var(--card-bg);
-            padding: 22px 22px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.08);
+        /* CARDS */
+        .card {
+            background:var(--card-bg);
+            padding:22px 22px 28px;
+            border-radius:18px;
+            border:1px solid rgba(255,255,255,0.09);
+            margin-bottom:26px;
             box-shadow:
                 0 0 16px rgba(59,130,246,0.25),
                 0 0 6px rgba(0,0,0,0.7);
-            transition: 0.25s ease;
-            text-align: left;
         }
 
-        .category-card:hover {
-            transform: translateY(-4px);
-            box-shadow:
-                0 0 22px rgba(59,130,246,0.6),
-                0 0 10px rgba(0,0,0,0.7);
-            border-color: rgba(59,130,246,0.6);
+        .card h2 {
+            font-family:'Montserrat',sans-serif;
+            font-size:1.35rem;
+            margin-bottom:10px;
         }
 
-        .category-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.35rem;
-            margin-bottom: 8px;
+        .card p, .card li {
+            font-size:1rem;
+            color:var(--muted);
         }
 
-        .category-description {
-            color: var(--muted);
-            font-size: 1rem;
-            margin-bottom: 12px;
+        ul { padding-left:20px; }
+        li { margin-bottom:8px; }
+
+        .risk-box {
+            display:inline-block;
+            background:rgba(59,130,246,0.2);
+            padding:8px 14px;
+            border-radius:8px;
+            border:1px solid rgba(59,130,246,0.4);
+            color:white;
+            font-weight:600;
+            margin-top:10px;
         }
 
-        /* TICKER LIST */
-        .ticker-list span {
-            display: inline-block;
-            background: rgba(255,255,255,0.07);
-            padding: 6px 10px;
-            border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.08);
-            margin: 4px 6px 6px 0;
-            color: #fff;
-            font-size: 0.98rem;
+        /* TICKERS */
+        .ticker-grid span {
+            display:inline-block;
+            background:rgba(255,255,255,0.07);
+            padding:6px 10px;
+            border-radius:6px;
+            border:1px solid rgba(255,255,255,0.1);
+            margin:4px;
+            font-size:0.95rem;
+            color:#fff;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- BACKGROUND -->
     <div class="animated-bg"></div>
     <div class="orb blue"></div>
     <div class="orb gold"></div>
 
     <div class="page-wrapper">
 
-        <!-- HEADER -->
         <h1>Bonds</h1>
         <p class="page-subtitle">
-            Bonds are safer, income-focused investments.  
-            Explore the major types used by long-term investors and beginners.
+            Bonds bring stability.  
+            They don’t move as fast as stocks — but that’s their strength.  
+            They protect your portfolio during storms and give you steady, predictable income.
         </p>
 
         <hr class="blue-divider">
 
-        <!-- CATEGORY GRID -->
-        <div class="category-grid">
+        <!-- WHAT IT IS -->
+        <div class="card">
+            <h2>What It Is</h2>
+            <p>
+                A bond is a loan you give to a government or company.  
+                They agree to pay you interest consistently and return the full amount later.
+            </p>
+            <p>
+                Think of bonds as the “calming balance” to your portfolio —  
+                delivering stability while your stocks focus on growth.
+            </p>
+        </div>
 
-            <!-- TREASURY BONDS -->
-            <div class="category-card">
-                <div class="category-title">U.S. Treasury Bonds</div>
-                <p class="category-description">
-                    Safest bonds backed by the U.S. government.
-                </p>
-                <div class="ticker-list">
-                    <span>TLT</span><span>IEF</span><span>SHY</span><span>GOVT</span>
-                </div>
+        <!-- HOW IT WORKS -->
+        <div class="card">
+            <h2>How It Works</h2>
+            <p>Bonds work through three simple steps:</p>
+            <ul>
+                <li><strong>You lend money.</strong> The issuer (government or corporation) borrows from you.</li>
+                <li><strong>You earn interest.</strong> They pay you fixed payments called “coupon payments.”</li>
+                <li><strong>You get your full amount back.</strong> At the end of the bond term (maturity), you receive your original amount.</li>
+            </ul>
+            <p>
+                Bonds smooth out volatility — when stocks drop, bonds often climb or stay stable.
+            </p>
+        </div>
+
+        <!-- PROS -->
+        <div class="card">
+            <h2>Pros</h2>
+            <ul>
+                <li>✔ Very stable compared to stocks</li>
+                <li>✔ Pays consistent interest income</li>
+                <li>✔ Helps balance a portfolio</li>
+                <li>✔ Great for conservative investors</li>
+                <li>✔ U.S. Treasuries are considered extremely safe</li>
+            </ul>
+        </div>
+
+        <!-- CONS -->
+        <div class="card">
+            <h2>Cons</h2>
+            <ul>
+                <li>✘ Lower returns than stocks</li>
+                <li>✘ Inflation can reduce real returns</li>
+                <li>✘ Long-term bonds fall when interest rates rise</li>
+                <li>✘ Corporate bonds can default (rare for high-quality)</li>
+            </ul>
+        </div>
+
+        <!-- RISK -->
+        <div class="card">
+            <h2>Risk Level</h2>
+            <p class="risk-box">⭐️⭐️ (Low Risk)</p>
+            <p>
+                Treasuries: Very low risk  
+                Corporate bonds: Medium  
+                High-yield bonds: Higher risk but higher income
+            </p>
+        </div>
+
+        <!-- TIME HORIZON -->
+        <div class="card">
+            <h2>Time Horizon</h2>
+            <p>
+                Bonds work best for short-to-medium goals (1–10 years).  
+                Long-term investors may also use bonds for stability and balance.
+            </p>
+        </div>
+
+        <!-- MISTAKES -->
+        <div class="card">
+            <h2>Beginner Mistakes to Avoid</h2>
+            <ul>
+                <li>❌ Buying long-term bonds during high rates</li>
+                <li>❌ Reaching for high-yield (junk) without knowing risks</li>
+                <li>❌ Ignoring inflation’s impact</li>
+                <li>❌ Holding only bonds — no growth from stocks</li>
+            </ul>
+        </div>
+
+        <!-- TICKERS -->
+        <div class="card">
+            <h2>Popular Bond Types & Tickers</h2>
+
+            <h3 style="margin-top:15px;">📌 Treasury Bond ETFs (Very Safe)</h3>
+            <div class="ticker-grid">
+                <span>BIL</span><span>SHV</span><span>VGSH</span><span>SHY</span><span>IEF</span><span>TLT</span>
             </div>
 
-            <!-- CORPORATE BONDS -->
-            <div class="category-card">
-                <div class="category-title">Corporate Bonds</div>
-                <p class="category-description">
-                    Issued by companies; higher yield than Treasuries.
-                </p>
-                <div class="ticker-list">
-                    <span>LQD</span><span>HYG</span><span>IGIB</span>
-                </div>
+            <h3 style="margin-top:20px;">📌 Total Bond Market ETFs</h3>
+            <div class="ticker-grid">
+                <span>BND</span><span>AGG</span><span>SCHZ</span><span>BNDS</span>
             </div>
 
-            <!-- MUNICIPAL BONDS -->
-            <div class="category-card">
-                <div class="category-title">Municipal Bonds</div>
-                <p class="category-description">
-                    Issued by states/cities; often tax-free.
-                </p>
-                <div class="ticker-list">
-                    <span>MUB</span><span>TAXF</span><span>VTEB</span>
-                </div>
+            <h3 style="margin-top:20px;">📌 Corporate Bond ETFs</h3>
+            <div class="ticker-grid">
+                <span>LQD</span><span>VCIT</span><span>IGIB</span><span>SPIB</span>
             </div>
 
-            <!-- SHORT-TERM BONDS -->
-            <div class="category-card">
-                <div class="category-title">Short-Term Bonds</div>
-                <p class="category-description">
-                    Lower risk, lower duration, very stable value.
-                </p>
-                <div class="ticker-list">
-                    <span>VGSH</span><span>SHV</span><span>BSV</span>
-                </div>
+            <h3 style="margin-top:20px;">📌 Municipal Bond ETFs (Tax-Free)</h3>
+            <div class="ticker-grid">
+                <span>MUB</span><span>VTEB</span><span>TAXF</span>
             </div>
 
-            <!-- INTERNATIONAL BONDS -->
-            <div class="category-card">
-                <div class="category-title">International Bonds</div>
-                <p class="category-description">
-                    Bonds issued outside the U.S. for global exposure.
-                </p>
-                <div class="ticker-list">
-                    <span>BNDX</span><span>IGOV</span><span>EMB</span>
-                </div>
-            </div>
-
-            <!-- BOND ETFs -->
-            <div class="category-card">
-                <div class="category-title">Bond ETFs</div>
-                <p class="category-description">
-                    Diversified baskets of bonds in one fund.
-                </p>
-                <div class="ticker-list">
-                    <span>BND</span><span>AGG</span><span>TIP</span>
-                </div>
+            <h3 style="margin-top:20px;">📌 High-Yield (“Junk”) Bonds</h3>
+            <div class="ticker-grid">
+                <span>HYG</span><span>JNK</span><span>USHY</span>
             </div>
 
         </div>
