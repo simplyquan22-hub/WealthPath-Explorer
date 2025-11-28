@@ -28,13 +28,13 @@
             line-height: 1.6;
         }
 
-        /* Background & Orbs */
         .animated-bg {
             position: fixed;
             inset: 0;
             background: radial-gradient(circle at 25% 15%, #0f172a, #0b0e12 80%);
             z-index: -2;
         }
+
         .orb {
             position: fixed;
             width: 300px;
@@ -53,7 +53,6 @@
             to { transform: translateY(-35px); }
         }
 
-        /* Wrapper */
         .page-wrapper {
             max-width: 1000px;
             padding: 110px 22px 80px;
@@ -61,7 +60,6 @@
             text-align: center;
         }
 
-        /* Hero */
         .hero-tagline {
             font-size: 0.92rem;
             text-transform: uppercase;
@@ -93,7 +91,6 @@
             box-shadow: 0 0 12px rgba(59,130,246,0.5);
         }
 
-        /* Search */
         .search-container {
             max-width: 550px;
             margin: 0 auto;
@@ -133,13 +130,13 @@
             box-shadow: 0 0 28px rgba(59,130,246,0.8);
         }
 
-        #tickerNotice {
-            font-size: 0.9rem;
-            color: var(--muted);
-            margin-top: 10px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Explanation Box */
+        .fade { animation: fadeIn 0.6s ease forwards; }
+
         #explanationBox {
             display: none;
             background: var(--card-bg);
@@ -153,12 +150,16 @@
         }
 
         #explanationBox h2 {
-            font-size: 1.4rem;
+            font-size: 1.45rem;
             color: var(--accent);
             margin-bottom: 8px;
         }
 
-        /* Recommended Tickers */
+        #explanationBox p {
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
         .recommended-section {
             display: none;
             margin: 20px auto 10px;
@@ -185,11 +186,15 @@
             border: 1px solid var(--border);
             border-radius: 14px;
             font-weight: 600;
-            cursor: pointer;
+            transition: 0.3s ease;
             box-shadow: 0 0 12px rgba(59,130,246,0.22);
         }
 
-        /* MarketWatch Button */
+        .mini-card:hover {
+            background: rgba(59,130,246,0.18);
+            transform: translateY(-2px);
+        }
+
         #openMarketBtn {
             display: none;
             margin: 30px auto 40px;
@@ -200,11 +205,14 @@
             font-size: 1.1rem;
             font-weight: 700;
             text-decoration: none;
-            cursor: pointer;
             box-shadow: 0 0 25px rgba(59,130,246,0.55);
         }
 
-        /* What to Look For */
+        #openMarketBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(59,130,246,0.85);
+        }
+
         .look-section {
             display: none;
             text-align: left;
@@ -232,15 +240,25 @@
             box-shadow: 0 0 16px rgba(59,130,246,0.22);
             opacity: 0;
             transform: translateY(8px);
-            animation: slideUp 0.6s ease forwards;
+            animation: fadeIn 0.6s ease forwards;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to   { opacity: 1; transform: translateY(0); }
+        .look-icon {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
         }
 
-        /* Back Button */
+        .look-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .look-card p {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
         .back-button {
             margin: 55px auto 0;
             display: inline-block;
@@ -266,242 +284,74 @@
 
         <div class="hero-tagline">WealthPath Research Tool</div>
         <h1>WealthPath Ticker Explorer</h1>
-        <p class="hero-subtitle">
-            Search any ETF, stock, index fund, mutual fund, crypto, or commodity — and get clear analysis instantly.
-        </p>
+        <p class="hero-subtitle">Search any ticker to explore its full MarketWatch details.</p>
 
         <hr class="blue-divider">
 
-        <!-- Search -->
         <div class="search-container">
-            <input id="tickerInput" placeholder="Enter a ticker (ex: VTI, AAPL, BTC, VTSAX)">
+            <input id="tickerInput" placeholder="Enter a ticker symbol (ex: VOO, AAPL, BTC)">
             <button id="searchBtn">Search</button>
-
-            <p id="tickerNotice">
-                You must type actual ticker symbols — for example: <strong>VOO, VTI, AAPL, BTC</strong>.
-            </p>
         </div>
 
-        <!-- Explanation -->
         <div id="explanationBox"></div>
 
-        <!-- Recommended -->
         <div id="recommendedSection" class="recommended-section">
             <div class="recommended-title">Recommended Tickers</div>
             <div id="recommendedGrid" class="mini-card-grid"></div>
         </div>
 
-        <!-- MarketWatch Button -->
         <a id="openMarketBtn" target="_blank">Open Full Details on MarketWatch →</a>
 
-        <!-- What to Look For -->
         <div id="lookSection" class="look-section">
             <div class="look-title">What to Look For</div>
             <div id="lookGrid" class="look-grid"></div>
         </div>
 
-        <!-- Back Button -->
         <a href="index.html" class="back-button">← Back to Categories</a>
 
     </div>
 
 <script>
-// ===============================
-//  TICKER TYPE DETECTION (PERFECTED)
-// ===============================
-
-// Official curated ETF list (broad, diversified)
-const ETF_LIST = [
-    "VTI","VOO","QQQ","SCHD","VT","BND","VXUS","SPY",
-    "IVV","IWM","DIA","XLK","XLF","XLE","XLY","XLV","XLI"
-];
-
-// Major Bond ETFs
-const BOND_ETF_LIST = [
-    "BND","AGG","TLT","IEF","SCHZ","TIP","TIPS","LQD","HYG"
-];
-
-// Commodity funds/ETFs
-const COMMODITY_LIST = [
-    "GLD","SLV","PDBC","DBC","USO","UNG"
-];
-
-// Crypto symbols
-const CRYPTO_LIST = ["BTC","ETH","SOL","ADA","XRP","DOGE","LTC"];
-
-// Mutual funds end with X
-function isMutualFund(t) {
-    return t.endsWith("X");
-}
-
-// Main type detection
-function detectType(ticker) {
-    const t = ticker.toUpperCase();
-
-    // CRYPTO
-    if (CRYPTO_LIST.includes(t)) return "crypto";
-
-    // MUTUAL FUND
-    if (isMutualFund(t)) return "mutual";
-
-    // BOND ETF
-    if (BOND_ETF_LIST.includes(t)) return "bond-etf";
-
-    // ETF
-    if (ETF_LIST.includes(t)) return "etf";
-
-    // COMMODITY FUNDS
-    if (COMMODITY_LIST.includes(t)) return "commodity";
-
-    // DEFAULT → STOCK
-    return "stock";
-}
-
-// ===============================
-//  HUMAN READABLE LABELS
-// ===============================
-const TYPE_LABELS = {
-    "stock": "Stock",
-    "etf": "ETF",
-    "bond-etf": "Bond ETF",
-    "mutual": "Mutual Fund",
-    "crypto": "Cryptocurrency",
-    "commodity": "Commodity Fund"
-};
-
-// ===============================
-//  RECOMMENDED LISTS (CLEANED)
-// ===============================
-const recommendedLists = {
-    stock: ["AAPL","MSFT","NVDA","AMZN","META"],
-    etf: ["VTI","VOO","QQQ","SCHD","VT"],
-    "bond-etf": ["BND","AGG","TLT","IEF","SCHZ"],
-    mutual: ["VTSAX","FXAIX","SWPPX"],
-    crypto: ["BTC","ETH","SOL"],
-    commodity: ["GLD","SLV","PDBC"]
-};
-
-function buildRecommended(type) {
-    const list = recommendedLists[type] || [];
-    const grid = document.getElementById("recommendedGrid");
-    grid.innerHTML = "";
-
-    list.forEach(t => {
-        const div = document.createElement("div");
-        div.className = "mini-card fade";
-        div.textContent = `⭐ ${t}`;
-        div.onclick = () => {
-            document.getElementById("tickerInput").value = t;
-            document.getElementById("searchBtn").click();
-        };
-        grid.appendChild(div);
-    });
-}
-
-// ===============================
-//  “WHAT TO LOOK FOR” CARDS
-// ===============================
-const cards = {
-    stock: [
-        ["📈","Growth","Is the company expanding?"],
-        ["🏦","Financial Strength","Revenue, profit, debt levels."],
-        ["📊","Market Cap","Large-cap = stable, small-cap = riskier."],
-        ["📉","Volatility","Tech is high-risk; utilities lower-risk."],
-        ["📰","News","News moves stock prices fast."]
-    ],
-    etf: [
-        ["📊","Holdings","Check the top companies."],
-        ["🧭","Index Tracked","Know what benchmark it follows."],
-        ["📈","Sector Exposure","Which industries dominate?"],
-        ["💰","Expense Ratio","Lower fees = more long-term gains."],
-        ["💵","Dividends","Some ETFs pay regular income."]
-    ],
-    "bond-etf": [
-        ["🏦","Quality","Government vs corporate bonds."],
-        ["📉","Duration","Long-term bonds move more with rates."],
-        ["💰","Yield","Higher yield = higher risk."],
-        ["⚠️","Interest Rates","Bonds fall when rates rise."],
-        ["📘","Purpose","Stability, diversification, safety."]
-    ],
-    mutual: [
-        ["🧭","Benchmark","What index does it track?"],
-        ["💰","Expense Ratio","Fees matter long-term."],
-        ["📘","Category","Large-cap, mid-cap, bond, etc."],
-        ["📉","Turnover","High turnover = higher taxes."],
-        ["📈","Goal","Built for long-term investing."]
-    ],
-    crypto: [
-        ["⚡","Volatility","Crypto moves fast."],
-        ["🔒","Security","Network safety matters."],
-        ["🌐","Utility","Real usage or hype?"],
-        ["📉","Sentiment","Emotion drives price."],
-        ["💧","Liquidity","Higher liquidity = safer trades."]
-    ],
-    commodity: [
-        ["🌍","Global Demand","Demand moves prices."],
-        ["🔄","Cycles","Commodities move in cycles."],
-        ["📉","Volatility","Very volatile assets."],
-        ["🏭","Industry Drivers","Oil = energy demand, etc."],
-        ["⚠️","Macro Events","Wars, inflation, supply issues."]
-    ]
-};
-
-function buildLookCards(type) {
-    const grid = document.getElementById("lookGrid");
-    grid.innerHTML = "";
-
-    cards[type].forEach(([icon,title,desc], i) => {
-        const card = document.createElement("div");
-        card.className = "look-card";
-        card.style.animationDelay = `${i * 0.08}s`;
-        card.innerHTML = `
-            <div class="look-icon">${icon}</div>
-            <h4>${title}</h4>
-            <p>${desc}</p>
-        `;
-        grid.appendChild(card);
-    });
-}
-
-// ===============================
-//  MAIN SEARCH LOGIC
-// ===============================
+// REMOVE type from title
 document.getElementById("searchBtn").onclick = () => {
     const input = document.getElementById("tickerInput").value.trim().toUpperCase();
     if (!input) return;
 
-    const type = detectType(input);
-    const label = TYPE_LABELS[type];
+    let url = `https://www.marketwatch.com/investing/stock/${input.toLowerCase()}`;
+    if (input.endsWith("X")) url = `https://www.marketwatch.com/investing/fund/${input.toLowerCase()}`;
+    if (input === "BTC") url = `https://www.marketwatch.com/investing/cryptocurrency/btcusd`;
 
-    // Build MarketWatch link
-    let url = "";
-    if (type === "stock") url = `https://www.marketwatch.com/investing/stock/${input.toLowerCase()}`;
-    else if (type === "etf" || type === "bond-etf" || type === "mutual") url = `https://www.marketwatch.com/investing/fund/${input.toLowerCase()}`;
-    else if (type === "crypto") url = `https://www.marketwatch.com/investing/cryptocurrency/${input.toLowerCase()}usd`;
-    else if (type === "commodity") url = `https://www.marketwatch.com/investing/fund/${input.toLowerCase()}`;
-    
-    // Update explanation box
     const exp = document.getElementById("explanationBox");
     exp.style.display = "block";
     exp.classList.add("fade");
     exp.innerHTML = `
-        <h2>${input} — ${label}</h2>
+        <h2>${input}</h2>
         <p>Tap the button below to open full details on MarketWatch — overview, performance, news, financials and more.</p>
     `;
 
-    // Recommended
     document.getElementById("recommendedSection").style.display = "block";
-    buildRecommended(type);
+    document.getElementById("recommendedGrid").innerHTML = `
+        <div class="mini-card">⭐ AAPL</div>
+        <div class="mini-card">⭐ MSFT</div>
+        <div class="mini-card">⭐ NVDA</div>
+        <div class="mini-card">⭐ AMZN</div>
+        <div class="mini-card">⭐ META</div>
+    `;
 
-    // MarketWatch Button
     const btn = document.getElementById("openMarketBtn");
     btn.style.display = "inline-block";
     btn.href = url;
 
-    // What to Look For
     const lookSec = document.getElementById("lookSection");
     lookSec.style.display = "block";
-    buildLookCards(type);
+
+    document.getElementById("lookGrid").innerHTML = `
+        <div class="look-card"><div class="look-icon">📊</div><h4>Holdings</h4><p>See top companies inside the fund or stock.</p></div>
+        <div class="look-card"><div class="look-icon">🧭</div><h4>Sector Exposure</h4><p>Which industries dominate the asset.</p></div>
+        <div class="look-card"><div class="look-icon">💰</div><h4>Fees / Ratios</h4><p>Check expense ratios for ETFs & funds.</p></div>
+        <div class="look-card"><div class="look-icon">💵</div><h4>Dividends</h4><p>Some assets pay regular dividends.</p></div>
+        <div class="look-card"><div class="look-icon">📈</div><h4>Performance</h4><p>Review long-term growth trends.</p></div>
+    `;
 };
 </script>
 
