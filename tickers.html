@@ -18,8 +18,7 @@
             --card-bg: rgba(255, 255, 255, 0.06);
         }
 
-        /* GLOBAL */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background: var(--bg);
@@ -35,10 +34,10 @@
             background: radial-gradient(circle at 25% 15%, #0f172a, #0b0e12 80%);
             z-index: -3;
         }
-
         .orb {
             position: fixed;
-            width: 300px; height: 300px;
+            width: 300px;
+            height: 300px;
             filter: blur(130px);
             opacity: 0.32;
             border-radius: 50%;
@@ -47,17 +46,13 @@
         }
         .orb.blue { background: #3b82f6; top: 18%; left: 12%; }
         .orb.gold { background: #facc15; bottom: 10%; right: 10%; }
-
-        @keyframes float {
-            from { transform: translateY(0); }
-            to   { transform: translateY(-35px); }
-        }
+        @keyframes float { from {transform:translateY(0);} to {transform:translateY(-35px);} }
 
         /* PAGE WRAPPER */
         .page-wrapper {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 110px 22px 90px;
+            padding: 110px 22px 80px;
             text-align: center;
         }
 
@@ -70,385 +65,306 @@
             letter-spacing: 0.06em;
             margin-bottom: 10px;
         }
-
         h1 {
             font-family: 'Montserrat', sans-serif;
             font-weight: 800;
             font-size: 2.6rem;
-            margin-bottom: 14px;
+            margin-bottom: 15px;
         }
-
         .hero-subtitle {
             font-size: 1.08rem;
             color: var(--muted);
             max-width: 620px;
             margin: 0 auto 32px;
         }
-
         .blue-divider {
-            width: 130px;
-            height: 2px;
-            background: var(--accent);
-            margin: 22px auto 40px;
-            border-radius: 2px;
-            box-shadow: 0 0 12px rgba(59,130,246,0.45);
+            width:130px;
+            border-top:2px solid var(--accent);
+            margin:22px auto 40px;
+            opacity:0.85;
+            border-radius:2px;
+            box-shadow:0 0 12px rgba(59,130,246,0.45);
         }
 
-        /* SEARCH CARD */
-        .ticker-card {
+        /* CARD (MATCHES YOUR EXACT DESIGN) */
+        .glass-card {
             background: var(--card-bg);
-            border: 1px solid var(--border);
             border-radius: 18px;
-            padding: 22px 26px;
-            max-width: 780px;
-            margin: 0 auto 45px;
-            text-align: left;
+            border: 1px solid rgba(255,255,255,0.12);
             box-shadow: 0 0 18px rgba(59,130,246,0.25);
+            padding: 24px 28px;
+            max-width: 780px;
+            margin: 0 auto;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
         }
 
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: 18px;
+            background: radial-gradient(circle at top left, rgba(59,130,246,0.45), transparent 55%);
+            opacity: 0.25;
+        }
+
+        /* INPUT */
         .ticker-input {
             width: 100%;
             padding: 12px 14px;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.18);
-            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.05);
             color: var(--text);
+            margin-top: 12px;
+            margin-bottom: 16px;
             font-size: 1rem;
-            margin-top: 10px;
-            margin-bottom: 14px;
         }
 
-        .ticker-search-btn {
-            padding: 11px 22px;
-            border: none;
+        /* BUTTON */
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
             border-radius: 999px;
             background: var(--accent);
             color: white;
             font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(59,130,246,0.6);
+            text-decoration: none;
+            box-shadow:
+                0 0 20px rgba(59,130,246,0.5),
+                0 0 7px rgba(59,130,246,0.7);
             transition: 0.18s ease;
+            cursor: pointer;
         }
-        .ticker-search-btn:hover {
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 26px rgba(59,130,246,0.9);
+            box-shadow:
+                0 0 26px rgba(59,130,246,0.7),
+                0 0 10px rgba(59,130,246,0.9);
         }
 
-        /* TYPE LABEL */
-        #tickerTypeLabel {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--accent);
-            margin-bottom: 4px;
-            display: none;
+        /* RESULT TYPE */
+        #resultType {
+            display:none;
+            font-size:0.95rem;
+            font-weight:600;
+            color:var(--accent);
+            margin-bottom:3px;
         }
 
-        /* Tiny blue divider under type label */
-        #tickerTypeLine {
-            width: 65px;
+        /* Tiny blue line */
+        #typeLine {
+            display:none;
+            width: 60px;
             height: 2px;
             background: var(--accent);
             border-radius: 2px;
             margin-bottom: 14px;
-            display: none;
-            box-shadow: 0 0 8px rgba(59,130,246,0.5);
+            box-shadow:0 0 10px rgba(59,130,246,0.6);
         }
 
-        /* RESULT BLOCK */
-        .ticker-result {
-            display: none;
-            margin-top: 20px;
-            text-align: left;
-        }
-
-        .ticker-symbol {
+        /* SYMBOL */
+        #resultSymbol {
+            display:none;
             font-family: 'Montserrat';
-            font-size: 1.45rem;
-            font-weight: 800;
-            margin-bottom: 4px;
+            font-size:1.6rem;
+            font-weight:800;
+            margin-bottom:6px;
         }
-
-        .ticker-note {
-            color: var(--muted);
-            font-size: 0.95rem;
-            margin-bottom: 16px;
-        }
-
-        /* RECOMMENDED */
-        .ticker-recommended-title {
-            font-size: 0.98rem;
-            font-weight: 600;
-            color: var(--accent);
-            margin-bottom: 6px;
-        }
-
-        .ticker-pill-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .ticker-pill {
-            padding: 7px 12px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.14);
-            font-size: 0.86rem;
-            cursor: pointer;
-            color: var(--text);
-        }
-        .ticker-pill:hover {
-            background: rgba(59,130,246,0.3);
+        #resultNote {
+            display:none;
+            color:var(--muted);
+            font-size:0.95rem;
+            margin-bottom:18px;
         }
 
         /* WHAT TO LOOK FOR (fade-in) */
-        #tickerLookFor {
-            margin-top: 20px;
-            border: 1px solid rgba(255,255,255,0.12);
-            background: rgba(255,255,255,0.05);
-            border-radius: 14px;
-            padding: 16px 18px;
-            animation: lookFade 0.7s ease forwards;
-            opacity: 0;
+        #lookCard {
+            display:none;
+            opacity:0;
+            animation: fadeInUp 0.45s ease forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity:0; transform: translateY(10px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+        #lookCard ul { margin-top:10px; }
+        #lookCard li {
+            margin-bottom:6px;
+            color:var(--muted);
+            font-size:0.92rem;
         }
 
-        @keyframes lookFade {
-            from { opacity: 0; transform: translateY(14px); }
-            to   { opacity: 1; transform: translateY(0); }
+        /* PILL ROW */
+        .pill-row {
+            display:flex;
+            flex-wrap:wrap;
+            gap:8px;
+            margin-bottom:16px;
+        }
+        .pill {
+            padding:7px 12px;
+            border-radius:999px;
+            background:rgba(255,255,255,0.06);
+            border:1px solid rgba(255,255,255,0.14);
+            font-size:0.85rem;
+            cursor:pointer;
+        }
+        .pill:hover {
+            background:rgba(59,130,246,0.3);
         }
 
-        #lookForList li {
-            color: var(--muted);
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-        }
-
-        /* BACK TO CATEGORIES CTA */
-        .cta-button {
-            padding: 12px 30px;
-            border-radius: 999px;
-            background: var(--accent);
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            box-shadow: 0 0 20px rgba(59,130,246,0.6);
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 40px;
-        }
     </style>
 </head>
 
 <body>
-    <div class="animated-bg"></div>
-    <div class="orb blue"></div>
-    <div class="orb gold"></div>
 
-    <div class="page-wrapper">
-        <div class="hero-tagline">Beginner-Friendly Research</div>
+<div class="animated-bg"></div>
+<div class="orb blue"></div>
+<div class="orb gold"></div>
 
-        <h1>WealthPath — Ticker Explorer</h1>
+<div class="page-wrapper">
 
-        <p class="hero-subtitle">
-            Instantly explore any stock, ETF, mutual fund, or crypto ticker — and view it on MarketWatch.
-        </p>
+    <div class="hero-tagline">Beginner-Friendly Research</div>
 
-        <div class="blue-divider"></div>
+    <h1>Ticker Explorer</h1>
 
-        <div class="ticker-card">
-            <div class="ticker-card-title" style="font-weight:700; color:var(--accent); margin-bottom:6px;">
-                🔍 Search a ticker
-            </div>
+    <p class="hero-subtitle">
+        Search any stock, ETF, mutual fund, or crypto ticker and instantly open it on MarketWatch.
+    </p>
 
-            <input id="tickerInput" class="ticker-input" placeholder="Enter a ticker (VTI, AAPL, BTC, VTSAX)">
+    <hr class="blue-divider">
 
-            <button id="tickerSearchBtn" class="ticker-search-btn">
-                Search & Open →
-            </button>
+    <!-- SEARCH CARD -->
+    <div class="glass-card">
 
-            <div id="tickerError" style="
-                display:none;
-                margin-top:14px;
-                padding:10px;
-                border-radius:10px;
-                background:rgba(248,113,113,0.08);
-                border:1px solid rgba(248,113,113,0.6);
-                color:#fecaca;
-                font-size:0.9rem;
-            ">
-                ⚠️ Invalid ticker. Try: VTI, AAPL, VOO, BTC, QQQ.
-            </div>
+        <div style="font-weight:700; color:var(--accent);">🔍 Search Ticker</div>
 
-            <!-- RESULT SECTION -->
-            <div id="tickerResult" class="ticker-result">
+        <input id="tickerInput" class="ticker-input" placeholder="Enter a ticker (VTI, AAPL, BTC, VTSAX)">
 
-                <!-- TYPE LABEL + BLUE LINE -->
-                <div id="tickerTypeLabel"></div>
-                <div id="tickerTypeLine"></div>
+        <button id="searchBtn" class="btn">Search</button>
 
-                <!-- SYMBOL -->
-                <div id="tickerSymbol" class="ticker-symbol"></div>
-                <div id="tickerNote" class="ticker-note"></div>
+        <!-- RESULT -->
+        <div id="resultType"></div>
+        <div id="typeLine"></div>
 
-                <!-- MARKETWATCH BUTTON -->
-                <a id="tickerOpenBtn" class="ticker-search-btn" target="_blank" style="margin-bottom:18px; display:inline-block;">
-                    Open on MarketWatch →
-                </a>
+        <div id="resultSymbol"></div>
+        <div id="resultNote"></div>
 
-                <!-- RECOMMENDED -->
-                <div class="ticker-recommended-title">You can also explore:</div>
-                <div id="tickerRecommendedRow" class="ticker-pill-row"></div>
+        <a id="openBtn" class="btn" style="display:none; margin-bottom:16px;" target="_blank"></a>
 
-                <!-- WHAT TO LOOK FOR (dynamic) -->
-                <div id="tickerLookFor">
-                    <div style="font-weight:600; color:var(--accent); margin-bottom:6px;">
-                        What to look for
-                    </div>
-                    <ul id="lookForList"></ul>
-                </div>
+        <div class="pill-row" id="recommendedRow"></div>
 
-            </div>
+        <!-- WHAT TO LOOK FOR -->
+        <div id="lookCard">
+            <div style="font-weight:600; color:var(--accent)">What to look for</div>
+            <ul id="lookList"></ul>
         </div>
 
-        <!-- BACK CTA -->
-        <a href="index.html" class="cta-button">← Back to Categories</a>
     </div>
 
-    <!-- ========================= JS ========================= -->
-    <script>
-        const inputEl = document.getElementById("tickerInput");
-        const errorEl = document.getElementById("tickerError");
-        const resultEl = document.getElementById("tickerResult");
-        const typeLabelEl = document.getElementById("tickerTypeLabel");
-        const typeLineEl = document.getElementById("tickerTypeLine");
-        const symbolEl = document.getElementById("tickerSymbol");
-        const noteEl = document.getElementById("tickerNote");
-        const openBtnEl = document.getElementById("tickerOpenBtn");
-        const recRowEl = document.getElementById("tickerRecommendedRow");
-        const searchBtnEl = document.getElementById("tickerSearchBtn");
-        const lookListEl = document.getElementById("lookForList");
-        const lookCardEl = document.getElementById("tickerLookFor");
+    <a href="index.html" class="btn" style="margin-top:40px;">← Back to Categories</a>
 
-        function isLikelyTicker(value) {
-            return /^[A-Za-z0-9]{1,6}$/.test(value.trim());
-        }
+</div>
 
-        function buildMarketWatchUrl(t) {
-            const crypto = ["BTC","ETH","SOL","ADA","XRP","DOGE","LTC"];
-            if (crypto.includes(t)) return `https://www.marketwatch.com/investing/cryptocurrency/${t.toLowerCase()}usd`;
-            if (t.endsWith("X")) return `https://www.marketwatch.com/investing/fund/${t.toLowerCase()}`;
-            const knownFunds = ["VTI","VOO","QQQ","SCHD","VT","BND","VXUS","SPY"];
-            if (knownFunds.includes(t)) return `https://www.marketwatch.com/investing/fund/${t.toLowerCase()}`;
-            return `https://www.marketwatch.com/investing/stock/${t.toLowerCase()}`;
-        }
+<script>
+const input = document.getElementById("tickerInput");
+const type = document.getElementById("resultType");
+const line = document.getElementById("typeLine");
+const symbol = document.getElementById("resultSymbol");
+const note = document.getElementById("resultNote");
+const openBtn = document.getElementById("openBtn");
+const lookCard = document.getElementById("lookCard");
+const lookList = document.getElementById("lookList");
+const recRow = document.getElementById("recommendedRow");
 
-        function getType(t) {
-            const crypto = ["BTC","ETH","SOL","ADA","XRP","DOGE","LTC"];
-            if (crypto.includes(t)) return "crypto";
-            if (t.endsWith("X")) return "mutual";
-            return "stock";
-        }
+function searchTicker(){
+    const t = input.value.trim().toUpperCase();
+    if(!t) return;
 
-        function getRecommended(t) {
-            const crypto = ["BTC","ETH","SOL"];
-            if (crypto.includes(t)) return crypto;
-            if (t.endsWith("X")) return ["VTSAX","SWPPX","FXAIX"];
-            return ["VTI","VOO","QQQ"];
-        }
+    symbol.textContent = t;
+    symbol.style.display = "block";
 
-        function whatToLookFor(type) {
-            return {
-                stock: [
-                    "Performance (1Y, 5Y, Max)",
-                    "Revenue & earnings growth",
-                    "PE ratio & valuation metrics",
-                    "Sector exposure",
-                    "Analyst sentiment"
-                ],
-                mutual: [
-                    "Expense ratio",
-                    "Fund strategy",
-                    "Top holdings",
-                    "Long-term returns",
-                    "Manager history"
-                ],
-                crypto: [
-                    "Volatility level",
-                    "Market cap",
-                    "Adoption & utility",
-                    "Long-term trend",
-                    "Major news events"
-                ]
-            }[type];
-        }
+    note.textContent = "Click below to open full price, performance, news and holdings.";
+    note.style.display = "block";
 
-        function handleSearch() {
-            const raw = inputEl.value.trim().toUpperCase();
-            if (!isLikelyTicker(raw)) {
-                errorEl.style.display = "block";
-                resultEl.style.display = "none";
-                return;
-            }
+    let typeText = "📊 Stock / ETF";
+    let look = [
+        "Performance (1Y, 5Y, Max)",
+        "Sector exposure",
+        "Holdings breakdown",
+        "Volatility",
+        "Analyst sentiment"
+    ];
 
-            const t = raw;
-            errorEl.style.display = "none";
-            resultEl.style.display = "block";
-            lookCardEl.style.opacity = "0"; // reset animation
+    if(["BTC","ETH","SOL","XRP","ADA","LTC","DOGE"].includes(t)){
+        typeText = "₿ Crypto";
+        look = [
+            "Volatility level",
+            "Long-term trend",
+            "Market cap",
+            "Adoption & utility",
+            "Major news events"
+        ];
+    }
+    else if(t.endsWith("X")){
+        typeText = "💼 Mutual Fund";
+        look = [
+            "Expense ratio",
+            "Top holdings",
+            "Fund strategy",
+            "Long-term returns",
+            "Manager track record"
+        ];
+    }
 
-            const type = getType(t);
+    type.textContent = typeText;
+    type.style.display = "block";
+    line.style.display = "block";
 
-            // Set Type Label + Icon
-            const icon = type === "stock" ? "📊" :
-                         type === "mutual" ? "💼" :
-                         "₿";
-            typeLabelEl.textContent = `${icon} ${type === "stock" ? "Stock / ETF" :
-                                                   type === "mutual" ? "Mutual Fund" :
-                                                   "Crypto"}`;
-            typeLabelEl.style.display = "block";
-            typeLineEl.style.display = "block";
+    // MARKETWATCH URL
+    let url = "";
+    if(typeText === "₿ Crypto"){
+        url = `https://www.marketwatch.com/investing/cryptocurrency/${t.toLowerCase()}usd`;
+    } else if(typeText === "💼 Mutual Fund"){
+        url = `https://www.marketwatch.com/investing/fund/${t.toLowerCase()}`;
+    } else {
+        url = `https://www.marketwatch.com/investing/stock/${t.toLowerCase()}`;
+    }
+    openBtn.href = url;
+    openBtn.textContent = "Open on MarketWatch →";
+    openBtn.style.display = "inline-block";
 
-            // Set Symbol + Note
-            symbolEl.textContent = t;
-            noteEl.textContent = "Click the button below to see price, performance, holdings, news and more on MarketWatch.";
+    // Recommended pills
+    recRow.innerHTML = "";
+    const recList = typeText==="₿ Crypto" ? ["BTC","ETH","SOL"] :
+                    typeText==="💼 Mutual Fund" ? ["VTSAX","SWPPX","FXAIX"] :
+                    ["VTI","VOO","QQQ"];
 
-            // MarketWatch URL
-            const url = buildMarketWatchUrl(t);
-            openBtnEl.href = url;
-            window.open(url, "_blank");
+    recList.forEach(r=>{
+        const pill=document.createElement("div");
+        pill.className="pill";
+        pill.textContent=r;
+        pill.onclick=()=>{ input.value=r; searchTicker(); };
+        recRow.appendChild(pill);
+    });
 
-            // Recommended
-            recRowEl.innerHTML = "";
-            getRecommended(t).forEach(r => {
-                const pill = document.createElement("button");
-                pill.className = "ticker-pill";
-                pill.textContent = r;
-                pill.addEventListener("click", () => {
-                    inputEl.value = r;
-                    handleSearch();
-                });
-                recRowEl.appendChild(pill);
-            });
+    // What to look for
+    lookList.innerHTML="";
+    look.forEach(i=>{
+        const li=document.createElement("li");
+        li.textContent=i;
+        lookList.appendChild(li);
+    });
 
-            // What to Look For
-            lookListEl.innerHTML = "";
-            whatToLookFor(type).forEach(item => {
-                let li = document.createElement("li");
-                li.textContent = item;
-                lookListEl.appendChild(li);
-            });
+    lookCard.style.display="block";
+    lookCard.style.opacity="1";
+}
 
-            // Trigger fade-in
-            setTimeout(() => {
-                lookCardEl.style.opacity = "1";
-            }, 50);
-        }
-
-        searchBtnEl.addEventListener("click", handleSearch);
-        inputEl.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") handleSearch();
-        });
-    </script>
+document.getElementById("searchBtn").onclick = searchTicker;
+input.addEventListener("keydown", e => e.key==="Enter" && searchTicker());
+</script>
 
 </body>
 </html>
