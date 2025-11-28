@@ -305,131 +305,155 @@
 
     </div>
 
-
 <script>
-/* ─────────────────────────────────────────────
-   KEYWORD → TICKER RESOLVER
-   ───────────────────────────────────────────── */
-function resolveKeywords(input) {
-    const lower = input.toLowerCase();
-    const map = {
-        "s&p": "VOO",
-        "s&p 500": "VOO",
-        "500": "VOO",
-        "sp500": "VOO",
-        "sp 500": "VOO",
-        "sandp": "VOO",
-        "index fund": "VTSAX",
-        "500 index": "FXAIX",
-        "total market": "VTI",
-        "us stock market": "VTI",
-        "international": "VXUS",
-        "international stocks": "VXUS",
-        "nasdaq": "QQQ",
-        "tech fund": "QQQ",
-        "crypto": "BTC",
-        "bitcoin": "BTC",
-        "ethereum": "ETH",
-        "bonds": "BND",
-        "us bonds": "BND",
-        "treasury": "BND",
-        "gold": "GLD",
-        "oil": "OIL",
-        "silver": "SLV"
-    };
+// ===============================
+//  TICKER TYPE DETECTION (PERFECTED)
+// ===============================
 
-    for (const key in map) {
-        if (lower.includes(key)) return map[key];
-    }
-    return input;
+// Official curated ETF list (broad, diversified)
+const ETF_LIST = [
+    "VTI","VOO","QQQ","SCHD","VT","BND","VXUS","SPY",
+    "IVV","IWM","DIA","XLK","XLF","XLE","XLY","XLV","XLI"
+];
+
+// Major Bond ETFs
+const BOND_ETF_LIST = [
+    "BND","AGG","TLT","IEF","SCHZ","TIP","TIPS","LQD","HYG"
+];
+
+// Commodity funds/ETFs
+const COMMODITY_LIST = [
+    "GLD","SLV","PDBC","DBC","USO","UNG"
+];
+
+// Crypto symbols
+const CRYPTO_LIST = ["BTC","ETH","SOL","ADA","XRP","DOGE","LTC"];
+
+// Mutual funds end with X
+function isMutualFund(t) {
+    return t.endsWith("X");
 }
 
-/* ─────────────────────────────────────────────
-   TYPE DETECTION
-   ───────────────────────────────────────────── */
-function detectType(t) {
-    const upper = t.toUpperCase();
+// Main type detection
+function detectType(ticker) {
+    const t = ticker.toUpperCase();
 
-    const crypto = ["BTC","ETH","SOL","ADA","XRP","DOGE","LTC"];
-    if (crypto.includes(upper)) return "crypto";
+    // CRYPTO
+    if (CRYPTO_LIST.includes(t)) return "crypto";
 
-    if (upper.endsWith("X")) return "mutual";
+    // MUTUAL FUND
+    if (isMutualFund(t)) return "mutual";
 
-    const knownEtfs = [
-        "TIPS","BND","TLT","SHY","IEF","AGG","TIP","VT","VTI","VOO",
-        "QQQ","SCHD","GLD","SLV","IWM","XLF","XLK","XLE","XLV"
-    ];
-    if (knownEtfs.includes(upper)) return "etf";
+    // BOND ETF
+    if (BOND_ETF_LIST.includes(t)) return "bond-etf";
 
-    if (upper.length >= 3 && upper.length <= 5) return "etf";
+    // ETF
+    if (ETF_LIST.includes(t)) return "etf";
 
+    // COMMODITY FUNDS
+    if (COMMODITY_LIST.includes(t)) return "commodity";
+
+    // DEFAULT → STOCK
     return "stock";
 }
 
-/* ─────────────────────────────────────────────
-   RECOMMENDED LISTS
-   ───────────────────────────────────────────── */
-const recommended = {
-    etf: ["VTI","VOO","QQQ","SCHD","VT"],
-    stock: ["AAPL","MSFT","NVDA","AMZN","META"],
-    mutual: ["VTSAX","FXAIX","SWPPX"],
-    crypto: ["BTC","ETH","SOL"],
-    commodity: ["GOLD","OIL","SILVER"]
+// ===============================
+//  HUMAN READABLE LABELS
+// ===============================
+const TYPE_LABELS = {
+    "stock": "Stock",
+    "etf": "ETF",
+    "bond-etf": "Bond ETF",
+    "mutual": "Mutual Fund",
+    "crypto": "Cryptocurrency",
+    "commodity": "Commodity Fund"
 };
 
-function showRecommended(type) {
+// ===============================
+//  RECOMMENDED LISTS (CLEANED)
+// ===============================
+const recommendedLists = {
+    stock: ["AAPL","MSFT","NVDA","AMZN","META"],
+    etf: ["VTI","VOO","QQQ","SCHD","VT"],
+    "bond-etf": ["BND","AGG","TLT","IEF","SCHZ"],
+    mutual: ["VTSAX","FXAIX","SWPPX"],
+    crypto: ["BTC","ETH","SOL"],
+    commodity: ["GLD","SLV","PDBC"]
+};
+
+function buildRecommended(type) {
+    const list = recommendedLists[type] || [];
     const grid = document.getElementById("recommendedGrid");
     grid.innerHTML = "";
-    recommended[type]?.forEach(t => {
+
+    list.forEach(t => {
         const div = document.createElement("div");
-        div.className = "mini-card";
-        div.textContent = "⭐ " + t;
-        div.onclick = () => { tickerInput.value = t; searchBtn.click(); };
+        div.className = "mini-card fade";
+        div.textContent = `⭐ ${t}`;
+        div.onclick = () => {
+            document.getElementById("tickerInput").value = t;
+            document.getElementById("searchBtn").click();
+        };
         grid.appendChild(div);
     });
 }
 
-/* ─────────────────────────────────────────────
-   WHAT-TO-LOOK-FOR CARDS
-   ───────────────────────────────────────────── */
-const lookData = {
-    etf: [
-        ["📊","Holdings","See top companies inside."],
-        ["🧭","Index","Know what benchmark it tracks."],
-        ["📈","Sectors","See weighted industries."],
-        ["💰","Expense Ratio","Lower fees win long-term."],
-        ["💵","Dividends","Some ETFs pay income."]
-    ],
+// ===============================
+//  “WHAT TO LOOK FOR” CARDS
+// ===============================
+const cards = {
     stock: [
-        ["🏦","Company Strength","Revenue + profitability."],
-        ["📈","Growth","Is the business expanding?"],
-        ["📊","Market Cap","Large-cap = safer."],
-        ["📉","Volatility","Small caps swing more."],
-        ["📰","Recent News","News instantly moves stocks."]
+        ["📈","Growth","Is the company expanding?"],
+        ["🏦","Financial Strength","Revenue, profit, debt levels."],
+        ["📊","Market Cap","Large-cap = stable, small-cap = riskier."],
+        ["📉","Volatility","Tech is high-risk; utilities lower-risk."],
+        ["📰","News","News moves stock prices fast."]
+    ],
+    etf: [
+        ["📊","Holdings","Check the top companies."],
+        ["🧭","Index Tracked","Know what benchmark it follows."],
+        ["📈","Sector Exposure","Which industries dominate?"],
+        ["💰","Expense Ratio","Lower fees = more long-term gains."],
+        ["💵","Dividends","Some ETFs pay regular income."]
+    ],
+    "bond-etf": [
+        ["🏦","Quality","Government vs corporate bonds."],
+        ["📉","Duration","Long-term bonds move more with rates."],
+        ["💰","Yield","Higher yield = higher risk."],
+        ["⚠️","Interest Rates","Bonds fall when rates rise."],
+        ["📘","Purpose","Stability, diversification, safety."]
     ],
     mutual: [
-        ["🧭","Benchmark","Long-term target index."],
-        ["💰","Expense Ratio","Fees matter a lot."],
-        ["📘","Category","Large/mid/small-cap."],
-        ["📉","Turnover","Higher turnover = taxes."],
-        ["📈","Long-Term Use","Designed for 10+ years."]
+        ["🧭","Benchmark","What index does it track?"],
+        ["💰","Expense Ratio","Fees matter long-term."],
+        ["📘","Category","Large-cap, mid-cap, bond, etc."],
+        ["📉","Turnover","High turnover = higher taxes."],
+        ["📈","Goal","Built for long-term investing."]
     ],
     crypto: [
-        ["⚡","Volatility","Moves very fast."],
-        ["🔒","Security","Is chain secure?"],
-        ["🌐","Utility","Real use cases?"],
-        ["📉","Sentiment","Hype drives price."],
-        ["💧","Liquidity","Higher = safer trading."]
+        ["⚡","Volatility","Crypto moves fast."],
+        ["🔒","Security","Network safety matters."],
+        ["🌐","Utility","Real usage or hype?"],
+        ["📉","Sentiment","Emotion drives price."],
+        ["💧","Liquidity","Higher liquidity = safer trades."]
+    ],
+    commodity: [
+        ["🌍","Global Demand","Demand moves prices."],
+        ["🔄","Cycles","Commodities move in cycles."],
+        ["📉","Volatility","Very volatile assets."],
+        ["🏭","Industry Drivers","Oil = energy demand, etc."],
+        ["⚠️","Macro Events","Wars, inflation, supply issues."]
     ]
 };
 
-function showLookCards(type) {
+function buildLookCards(type) {
     const grid = document.getElementById("lookGrid");
     grid.innerHTML = "";
-    lookData[type]?.forEach(([icon,title,desc], i) => {
+
+    cards[type].forEach(([icon,title,desc], i) => {
         const card = document.createElement("div");
         card.className = "look-card";
-        card.style.animationDelay = (i * 0.08) + "s";
+        card.style.animationDelay = `${i * 0.08}s`;
         card.innerHTML = `
             <div class="look-icon">${icon}</div>
             <h4>${title}</h4>
@@ -439,41 +463,45 @@ function showLookCards(type) {
     });
 }
 
-/* ─────────────────────────────────────────────
-   MAIN SEARCH LOGIC
-   ───────────────────────────────────────────── */
-const searchBtn = document.getElementById("searchBtn");
-const tickerInput = document.getElementById("tickerInput");
+// ===============================
+//  MAIN SEARCH LOGIC
+// ===============================
+document.getElementById("searchBtn").onclick = () => {
+    const input = document.getElementById("tickerInput").value.trim().toUpperCase();
+    if (!input) return;
 
-searchBtn.onclick = () => {
-    let raw = tickerInput.value.trim();
-    raw = resolveKeywords(raw);
-    if (!raw) return;
+    const type = detectType(input);
+    const label = TYPE_LABELS[type];
 
-    const t = raw.toUpperCase();
-    const type = detectType(t);
-
+    // Build MarketWatch link
     let url = "";
-    if (type === "stock") url = `https://www.marketwatch.com/investing/stock/${t}`;
-    if (type === "etf" || type === "mutual") url = `https://www.marketwatch.com/investing/fund/${t}`;
-    if (type === "crypto") url = `https://www.marketwatch.com/investing/cryptocurrency/${t}usd`;
-
-    const box = document.getElementById("explanationBox");
-    box.style.display = "block";
-    box.innerHTML = `
-        <h2>${t} — ${type.toUpperCase()}</h2>
+    if (type === "stock") url = `https://www.marketwatch.com/investing/stock/${input.toLowerCase()}`;
+    else if (type === "etf" || type === "bond-etf" || type === "mutual") url = `https://www.marketwatch.com/investing/fund/${input.toLowerCase()}`;
+    else if (type === "crypto") url = `https://www.marketwatch.com/investing/cryptocurrency/${input.toLowerCase()}usd`;
+    else if (type === "commodity") url = `https://www.marketwatch.com/investing/fund/${input.toLowerCase()}`;
+    
+    // Update explanation box
+    const exp = document.getElementById("explanationBox");
+    exp.style.display = "block";
+    exp.classList.add("fade");
+    exp.innerHTML = `
+        <h2>${input} — ${label}</h2>
         <p>Tap the button below to open full details on MarketWatch — overview, performance, news, financials and more.</p>
     `;
 
+    // Recommended
     document.getElementById("recommendedSection").style.display = "block";
-    showRecommended(type);
+    buildRecommended(type);
 
+    // MarketWatch Button
     const btn = document.getElementById("openMarketBtn");
     btn.style.display = "inline-block";
     btn.href = url;
 
-    document.getElementById("lookSection").style.display = "block";
-    showLookCards(type);
+    // What to Look For
+    const lookSec = document.getElementById("lookSection");
+    lookSec.style.display = "block";
+    buildLookCards(type);
 };
 </script>
 
