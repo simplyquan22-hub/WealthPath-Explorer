@@ -28,7 +28,7 @@
             line-height: 1.6;
         }
 
-        /* BACKGROUND */
+        /* Background & Orbs */
         .animated-bg {
             position: fixed;
             inset: 0;
@@ -37,7 +37,8 @@
         }
         .orb {
             position: fixed;
-            width: 300px; height: 300px;
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
             filter: blur(130px);
             opacity: 0.34;
@@ -47,9 +48,12 @@
         .orb.blue { background: #3b82f6; top: 18%; left: 12%; }
         .orb.gold { background: #facc15; bottom: 10%; right: 10%; }
 
-        @keyframes float { from { transform: translateY(0);} to { transform: translateY(-35px);} }
+        @keyframes float {
+            from { transform: translateY(0); }
+            to { transform: translateY(-35px); }
+        }
 
-        /* WRAPPER */
+        /* Wrapper */
         .page-wrapper {
             max-width: 1000px;
             padding: 110px 22px 80px;
@@ -57,7 +61,7 @@
             text-align: center;
         }
 
-        /* HERO */
+        /* Hero */
         .hero-tagline {
             font-size: 0.92rem;
             text-transform: uppercase;
@@ -85,13 +89,15 @@
             width: 130px;
             margin: 25px auto 45px;
             border-top: 2px solid var(--accent);
-            border-radius: 2px;
             opacity: 0.85;
             box-shadow: 0 0 12px rgba(59,130,246,0.5);
         }
 
-        /* SEARCH */
-        .search-container { max-width: 550px; margin: 0 auto; }
+        /* Search */
+        .search-container {
+            max-width: 550px;
+            margin: 0 auto;
+        }
 
         #tickerInput {
             width: 100%;
@@ -101,11 +107,12 @@
             border: 1px solid var(--border);
             color: var(--text);
             font-size: 1rem;
-            outline: none;
         }
+
         #tickerInput:focus {
             border-color: var(--accent);
             box-shadow: 0 0 12px rgba(59,130,246,0.4);
+            outline: none;
         }
 
         #searchBtn {
@@ -121,7 +128,18 @@
             box-shadow: 0 0 20px rgba(59,130,246,0.55);
         }
 
-        /* EXPLANATION CARD */
+        #searchBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 28px rgba(59,130,246,0.8);
+        }
+
+        #tickerNotice {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-top: 10px;
+        }
+
+        /* Explanation Box */
         #explanationBox {
             display: none;
             background: var(--card-bg);
@@ -136,47 +154,34 @@
 
         #explanationBox h2 {
             font-size: 1.4rem;
-            font-weight: 700;
             color: var(--accent);
-            margin-bottom: 6px;
-        }
-
-        .type-label {
-            font-size: 0.92rem;
-            font-weight: 600;
-            color: var(--text);
-            opacity: 0.85;
             margin-bottom: 8px;
         }
-        .type-bar {
-            width: 70px;
-            height: 2px;
-            background: var(--accent);
-            border-radius: 999px;
-            margin-bottom: 14px;
-        }
 
-        /* RECOMMENDED */
-        #recommendedSection {
+        /* Recommended Tickers */
+        .recommended-section {
             display: none;
             margin: 20px auto 10px;
             max-width: 900px;
             text-align: left;
         }
+
         .recommended-title {
             font-size: 1.27rem;
             font-weight: 700;
             color: var(--accent);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
+
         .mini-card-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
         }
+
         .mini-card {
             padding: 10px 16px;
-            background: rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.05);
             border: 1px solid var(--border);
             border-radius: 14px;
             font-weight: 600;
@@ -184,52 +189,60 @@
             box-shadow: 0 0 12px rgba(59,130,246,0.22);
         }
 
-        /* MARKETWATCH BUTTON */
+        /* MarketWatch Button */
         #openMarketBtn {
             display: none;
-            margin: 30px auto 10px;
+            margin: 30px auto 40px;
             padding: 14px 32px;
             border-radius: 999px;
             background: var(--accent);
             color: white;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 700;
             text-decoration: none;
+            cursor: pointer;
             box-shadow: 0 0 25px rgba(59,130,246,0.55);
         }
 
-        /* WHAT TO LOOK FOR */
-        #lookSection { display: none; margin-top: 35px; text-align: left; }
+        /* What to Look For */
+        .look-section {
+            display: none;
+            text-align: left;
+            margin-top: 45px;
+        }
+
         .look-title {
             font-size: 1.3rem;
             font-weight: 700;
             color: var(--accent);
             margin-bottom: 12px;
         }
+
         .look-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 16px;
         }
+
         .look-card {
             background: rgba(255,255,255,0.05);
             padding: 18px;
             border-radius: 16px;
             border: 1px solid var(--border);
             box-shadow: 0 0 16px rgba(59,130,246,0.22);
-            animation: fadeIn 0.5s ease forwards;
             opacity: 0;
-        }
-        .look-icon { font-size: 1.4rem; margin-bottom: 6px; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            transform: translateY(8px);
+            animation: slideUp 0.6s ease forwards;
         }
 
-        /* BACK BUTTON */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Back Button */
         .back-button {
-            margin-top: 50px;
+            margin: 55px auto 0;
             display: inline-block;
             padding: 12px 26px;
             border-radius: 999px;
@@ -245,78 +258,117 @@
 
 <body>
 
-<div class="animated-bg"></div>
-<div class="orb blue"></div>
-<div class="orb gold"></div>
+    <div class="animated-bg"></div>
+    <div class="orb blue"></div>
+    <div class="orb gold"></div>
 
-<div class="page-wrapper">
+    <div class="page-wrapper">
 
-    <div class="hero-tagline">WealthPath Research Tool</div>
+        <div class="hero-tagline">WealthPath Research Tool</div>
+        <h1>WealthPath Ticker Explorer</h1>
+        <p class="hero-subtitle">
+            Search any ETF, stock, index fund, mutual fund, crypto, or commodity — and get clear analysis instantly.
+        </p>
 
-    <h1>WealthPath Ticker Explorer</h1>
+        <hr class="blue-divider">
 
-    <p class="hero-subtitle">
-        Search any ETF, stock, index fund, mutual fund, crypto, or commodity — and get clear analysis instantly.
-    </p>
+        <!-- Search -->
+        <div class="search-container">
+            <input id="tickerInput" placeholder="Enter a ticker (ex: VTI, AAPL, BTC, VTSAX)">
+            <button id="searchBtn">Search</button>
 
-    <hr class="blue-divider">
+            <p id="tickerNotice">
+                You must type actual ticker symbols — for example: <strong>VOO, VTI, AAPL, BTC</strong>.
+            </p>
+        </div>
 
-    <!-- SEARCH -->
-    <div class="search-container">
-        <input id="tickerInput" placeholder="Enter a ticker (ex: VTI, AAPL, BTC, VTSAX)">
-        <button id="searchBtn">Search</button>
+        <!-- Explanation -->
+        <div id="explanationBox"></div>
+
+        <!-- Recommended -->
+        <div id="recommendedSection" class="recommended-section">
+            <div class="recommended-title">Recommended Tickers</div>
+            <div id="recommendedGrid" class="mini-card-grid"></div>
+        </div>
+
+        <!-- MarketWatch Button -->
+        <a id="openMarketBtn" target="_blank">Open Full Details on MarketWatch →</a>
+
+        <!-- What to Look For -->
+        <div id="lookSection" class="look-section">
+            <div class="look-title">What to Look For</div>
+            <div id="lookGrid" class="look-grid"></div>
+        </div>
+
+        <!-- Back Button -->
+        <a href="index.html" class="back-button">← Back to Categories</a>
+
     </div>
 
-    <!-- EXPLANATION -->
-    <div id="explanationBox"></div>
-
-    <!-- RECOMMENDED -->
-    <div id="recommendedSection">
-        <div class="recommended-title">Recommended Tickers</div>
-        <div id="recommendedGrid" class="mini-card-grid"></div>
-    </div>
-
-    <!-- MARKETWATCH BUTTON -->
-    <a id="openMarketBtn" target="_blank">Open Full Details on MarketWatch →</a>
-
-    <!-- WHAT TO LOOK FOR -->
-    <div id="lookSection">
-        <div class="look-title">What to Look For</div>
-        <div id="lookGrid" class="look-grid"></div>
-    </div>
-
-    <!-- BACK -->
-    <a href="index.html" class="back-button">← Back to Categories</a>
-
-</div>
 
 <script>
-/* IMPROVED TYPE DETECTION */
+/* ─────────────────────────────────────────────
+   KEYWORD → TICKER RESOLVER
+   ───────────────────────────────────────────── */
+function resolveKeywords(input) {
+    const lower = input.toLowerCase();
+    const map = {
+        "s&p": "VOO",
+        "s&p 500": "VOO",
+        "500": "VOO",
+        "sp500": "VOO",
+        "sp 500": "VOO",
+        "sandp": "VOO",
+        "index fund": "VTSAX",
+        "500 index": "FXAIX",
+        "total market": "VTI",
+        "us stock market": "VTI",
+        "international": "VXUS",
+        "international stocks": "VXUS",
+        "nasdaq": "QQQ",
+        "tech fund": "QQQ",
+        "crypto": "BTC",
+        "bitcoin": "BTC",
+        "ethereum": "ETH",
+        "bonds": "BND",
+        "us bonds": "BND",
+        "treasury": "BND",
+        "gold": "GLD",
+        "oil": "OIL",
+        "silver": "SLV"
+    };
+
+    for (const key in map) {
+        if (lower.includes(key)) return map[key];
+    }
+    return input;
+}
+
+/* ─────────────────────────────────────────────
+   TYPE DETECTION
+   ───────────────────────────────────────────── */
 function detectType(t) {
     const upper = t.toUpperCase();
 
-    // Crypto list
     const crypto = ["BTC","ETH","SOL","ADA","XRP","DOGE","LTC"];
     if (crypto.includes(upper)) return "crypto";
 
-    // Mutual funds end with X
     if (upper.endsWith("X")) return "mutual";
 
-    // Bond ETFs & common ETFs
     const knownEtfs = [
         "TIPS","BND","TLT","SHY","IEF","AGG","TIP","VT","VTI","VOO",
         "QQQ","SCHD","GLD","SLV","IWM","XLF","XLK","XLE","XLV"
     ];
     if (knownEtfs.includes(upper)) return "etf";
 
-    // If length is 3–5, assume ETF (better accuracy)
     if (upper.length >= 3 && upper.length <= 5) return "etf";
 
-    // Otherwise stock
     return "stock";
 }
 
-/* RECOMMENDED LISTS */
+/* ─────────────────────────────────────────────
+   RECOMMENDED LISTS
+   ───────────────────────────────────────────── */
 const recommended = {
     etf: ["VTI","VOO","QQQ","SCHD","VT"],
     stock: ["AAPL","MSFT","NVDA","AMZN","META"],
@@ -325,7 +377,21 @@ const recommended = {
     commodity: ["GOLD","OIL","SILVER"]
 };
 
-/* WHAT TO LOOK FOR */
+function showRecommended(type) {
+    const grid = document.getElementById("recommendedGrid");
+    grid.innerHTML = "";
+    recommended[type]?.forEach(t => {
+        const div = document.createElement("div");
+        div.className = "mini-card";
+        div.textContent = "⭐ " + t;
+        div.onclick = () => { tickerInput.value = t; searchBtn.click(); };
+        grid.appendChild(div);
+    });
+}
+
+/* ─────────────────────────────────────────────
+   WHAT-TO-LOOK-FOR CARDS
+   ───────────────────────────────────────────── */
 const lookData = {
     etf: [
         ["📊","Holdings","See top companies inside."],
@@ -350,58 +416,48 @@ const lookData = {
     ],
     crypto: [
         ["⚡","Volatility","Moves very fast."],
-        ["🔒","Security","Is chain secure?" ],
-        ["🌐","Utility","Actual use cases?"],
+        ["🔒","Security","Is chain secure?"],
+        ["🌐","Utility","Real use cases?"],
         ["📉","Sentiment","Hype drives price."],
         ["💧","Liquidity","Higher = safer trading."]
     ]
 };
 
-/* BUILD RECOMMENDED */
-function showRecommended(type) {
-    const grid = document.getElementById("recommendedGrid");
-    grid.innerHTML = "";
-    recommended[type].forEach(t => {
-        const div = document.createElement("div");
-        div.className = "mini-card";
-        div.textContent = "⭐ " + t;
-        div.onclick = () => { tickerInput.value = t; searchBtn.click(); };
-        grid.appendChild(div);
-    });
-}
-
-/* BUILD LOOK CARDS */
 function showLookCards(type) {
     const grid = document.getElementById("lookGrid");
     grid.innerHTML = "";
-    lookData[type].forEach(([icon,title,desc], i) => {
-        const el = document.createElement("div");
-        el.className = "look-card";
-        el.style.animationDelay = (i * 0.08) + "s";
-        el.innerHTML = `
+    lookData[type]?.forEach(([icon,title,desc], i) => {
+        const card = document.createElement("div");
+        card.className = "look-card";
+        card.style.animationDelay = (i * 0.08) + "s";
+        card.innerHTML = `
             <div class="look-icon">${icon}</div>
             <h4>${title}</h4>
             <p>${desc}</p>
         `;
-        grid.appendChild(el);
+        grid.appendChild(card);
     });
 }
 
-/* MAIN SEARCH */
+/* ─────────────────────────────────────────────
+   MAIN SEARCH LOGIC
+   ───────────────────────────────────────────── */
+const searchBtn = document.getElementById("searchBtn");
+const tickerInput = document.getElementById("tickerInput");
+
 searchBtn.onclick = () => {
-    const raw = tickerInput.value.trim();
+    let raw = tickerInput.value.trim();
+    raw = resolveKeywords(raw);
     if (!raw) return;
 
     const t = raw.toUpperCase();
     const type = detectType(t);
 
-    /* MARKETWATCH URL */
     let url = "";
     if (type === "stock") url = `https://www.marketwatch.com/investing/stock/${t}`;
     if (type === "etf" || type === "mutual") url = `https://www.marketwatch.com/investing/fund/${t}`;
     if (type === "crypto") url = `https://www.marketwatch.com/investing/cryptocurrency/${t}usd`;
 
-    /* CARD */
     const box = document.getElementById("explanationBox");
     box.style.display = "block";
     box.innerHTML = `
@@ -409,16 +465,13 @@ searchBtn.onclick = () => {
         <p>Tap the button below to open full details on MarketWatch — overview, performance, news, financials and more.</p>
     `;
 
-    /* Recommended */
     document.getElementById("recommendedSection").style.display = "block";
     showRecommended(type);
 
-    /* MarketWatch button */
     const btn = document.getElementById("openMarketBtn");
     btn.style.display = "inline-block";
     btn.href = url;
 
-    /* What to Look For */
     document.getElementById("lookSection").style.display = "block";
     showLookCards(type);
 };
