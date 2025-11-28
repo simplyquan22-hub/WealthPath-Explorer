@@ -291,17 +291,29 @@
 </div>
 
 <script>
-/* TYPE DETECTION */
+/* IMPROVED TYPE DETECTION */
 function detectType(t) {
     const upper = t.toUpperCase();
 
-    const cryptoSet = ["BTC","ETH","SOL","ADA","XRP","DOGE","LTC"];
-    if (cryptoSet.includes(upper)) return "crypto";
+    // Crypto list
+    const crypto = ["BTC","ETH","SOL","ADA","XRP","DOGE","LTC"];
+    if (crypto.includes(upper)) return "crypto";
 
+    // Mutual funds end with X
     if (upper.endsWith("X")) return "mutual";
-    if (upper.length <= 4) return "stock";
 
-    return "etf";
+    // Bond ETFs & common ETFs
+    const knownEtfs = [
+        "TIPS","BND","TLT","SHY","IEF","AGG","TIP","VT","VTI","VOO",
+        "QQQ","SCHD","GLD","SLV","IWM","XLF","XLK","XLE","XLV"
+    ];
+    if (knownEtfs.includes(upper)) return "etf";
+
+    // If length is 3–5, assume ETF (better accuracy)
+    if (upper.length >= 3 && upper.length <= 5) return "etf";
+
+    // Otherwise stock
+    return "stock";
 }
 
 /* RECOMMENDED LISTS */
@@ -313,14 +325,14 @@ const recommended = {
     commodity: ["GOLD","OIL","SILVER"]
 };
 
-/* WHAT TO LOOK FOR CARDS */
+/* WHAT TO LOOK FOR */
 const lookData = {
     etf: [
         ["📊","Holdings","See top companies inside."],
         ["🧭","Index","Know what benchmark it tracks."],
         ["📈","Sectors","See weighted industries."],
         ["💰","Expense Ratio","Lower fees win long-term."],
-        ["💵","Dividends","Some ETFs pay out income."]
+        ["💵","Dividends","Some ETFs pay income."]
     ],
     stock: [
         ["🏦","Company Strength","Revenue + profitability."],
@@ -333,12 +345,12 @@ const lookData = {
         ["🧭","Benchmark","Long-term target index."],
         ["💰","Expense Ratio","Fees matter a lot."],
         ["📘","Category","Large/mid/small-cap."],
-        ["📉","Turnover","Higher turnover = higher taxes."],
+        ["📉","Turnover","Higher turnover = taxes."],
         ["📈","Long-Term Use","Designed for 10+ years."]
     ],
     crypto: [
         ["⚡","Volatility","Moves very fast."],
-        ["🔒","Security","Is chain battle-tested?" ],
+        ["🔒","Security","Is chain secure?" ],
         ["🌐","Utility","Actual use cases?"],
         ["📉","Sentiment","Hype drives price."],
         ["💧","Liquidity","Higher = safer trading."]
@@ -383,19 +395,17 @@ searchBtn.onclick = () => {
     const t = raw.toUpperCase();
     const type = detectType(t);
 
-    /* MARKETWATCH URL LOGIC */
+    /* MARKETWATCH URL */
     let url = "";
-    if (type === "stock") url = `https://www.marketwatch.com/investing/stock/${t.toLowerCase()}`;
-    if (type === "etf" || type === "mutual") url = `https://www.marketwatch.com/investing/fund/${t.toLowerCase()}`;
-    if (type === "crypto") url = `https://www.marketwatch.com/investing/cryptocurrency/${t.toLowerCase()}usd`;
+    if (type === "stock") url = `https://www.marketwatch.com/investing/stock/${t}`;
+    if (type === "etf" || type === "mutual") url = `https://www.marketwatch.com/investing/fund/${t}`;
+    if (type === "crypto") url = `https://www.marketwatch.com/investing/cryptocurrency/${t}usd`;
 
-    /* SHOW EXPLANATION */
+    /* CARD */
     const box = document.getElementById("explanationBox");
     box.style.display = "block";
     box.innerHTML = `
         <h2>${t} — ${type.toUpperCase()}</h2>
-        <div class="type-label">${type}</div>
-        <div class="type-bar"></div>
         <p>Tap the button below to open full details on MarketWatch — overview, performance, news, financials and more.</p>
     `;
 
@@ -403,7 +413,7 @@ searchBtn.onclick = () => {
     document.getElementById("recommendedSection").style.display = "block";
     showRecommended(type);
 
-    /* MarketWatch link */
+    /* MarketWatch button */
     const btn = document.getElementById("openMarketBtn");
     btn.style.display = "inline-block";
     btn.href = url;
