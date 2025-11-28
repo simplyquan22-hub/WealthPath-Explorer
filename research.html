@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WealthPath — Research Guide & Ticker Translator</title>
+
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg:#0b0e12;
+            --text:#e9eef6;
+            --muted:#9aa4b2;
+            --accent:#3b82f6;
+            --border:rgba(255,255,255,0.15);
+            --card-bg:rgba(255,255,255,0.06);
+        }
+
+        * {margin:0; padding:0; box-sizing:border-box;}
+
+        body {
+            background:var(--bg);
+            color:var(--text);
+            font-family:'Inter',sans-serif;
+            line-height:1.65;
+            overflow-x:hidden;
+        }
+
+        /* BACKGROUND */
+        .animated-bg {
+            position:fixed;
+            inset:0;
+            background:radial-gradient(circle at 25% 15%, #0f172a, #0b0e12 80%);
+            z-index:-2;
+        }
+        .orb {
+            position:fixed;
+            width:300px;
+            height:300px;
+            border-radius:50%;
+            filter:blur(130px);
+            opacity:.32;
+            animation:float 11s ease-in-out infinite alternate;
+            z-index:-1;
+        }
+        .orb.blue {background:#3b82f6; top:18%; left:12%;}
+        .orb.gold {background:#facc15; bottom:10%; right:10%;}
+
+        @keyframes float {
+            from {transform:translateY(0);}
+            to   {transform:translateY(-35px);}
+        }
+
+        /* WRAPPER */
+        .page-wrapper {
+            max-width:1000px;
+            margin:0 auto;
+            padding:110px 22px 80px;
+            text-align:center;
+        }
+
+        .hero-tagline {
+            font-size:.95rem;
+            font-weight:600;
+            letter-spacing:.06em;
+            color:var(--accent);
+            margin-bottom:8px;
+            text-transform:uppercase;
+        }
+
+        h1 {
+            font-family:'Montserrat',sans-serif;
+            font-size:2.6rem;
+            font-weight:800;
+            margin-bottom:12px;
+        }
+
+        .hero-subtitle {
+            color:var(--muted);
+            max-width:650px;
+            margin:0 auto 32px;
+            font-size:1.1rem;
+        }
+
+        .blue-divider {
+            width:130px;
+            border:0;
+            border-top:2px solid var(--accent);
+            margin:24px auto 40px;
+            border-radius:2px;
+            opacity:.85;
+            box-shadow:0 0 12px rgba(59,130,246,.45);
+        }
+
+        /* ACCORDION */
+        .accordion-card {
+            background:var(--card-bg);
+            border:1px solid rgba(255,255,255,0.10);
+            border-radius:18px;
+            margin-bottom:20px;
+            padding:0;
+            overflow:hidden;
+            box-shadow:
+                0 0 16px rgba(59,130,246,.22),
+                0 0 6px rgba(0,0,0,.65);
+        }
+
+        .accordion-header {
+            padding:18px 20px;
+            font-size:1.2rem;
+            font-weight:700;
+            font-family:'Montserrat',sans-serif;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            cursor:pointer;
+            transition:.25s ease;
+        }
+
+        .accordion-header:hover {
+            background:rgba(255,255,255,0.04);
+        }
+
+        .accordion-icon {
+            font-size:1.6rem;
+            font-weight:800;
+            color:var(--accent);
+            transition:.25s ease;
+        }
+
+        .accordion-content {
+            display:none;
+            padding:20px 22px 28px;
+            text-align:left;
+            animation:fadeIn .35s ease both;
+        }
+
+        @keyframes fadeIn {
+            from {opacity:0; transform:translateY(6px);}
+            to   {opacity:1; transform:translateY(0);}
+        }
+
+        /* Ticker pills */
+        .ticker-grid {
+            display:flex;
+            flex-wrap:wrap;
+            gap:10px;
+            margin:12px 0 20px;
+        }
+
+        .ticker {
+            padding:7px 12px;
+            border-radius:10px;
+            background:rgba(255,255,255,0.07);
+            border:1px solid rgba(255,255,255,0.12);
+            box-shadow:0 0 12px rgba(59,130,246,0.25);
+            font-weight:600;
+            transition:.25s;
+            cursor:pointer;
+        }
+
+        .ticker:hover {
+            background:rgba(59,130,246,0.22);
+            transform:translateY(-2px);
+        }
+
+        .section-title {
+            font-size:1.05rem;
+            font-weight:700;
+            color:var(--accent);
+            margin-top:18px;
+            margin-bottom:6px;
+        }
+
+        .resource-link {
+            display:block;
+            padding:12px 14px;
+            margin:8px 0;
+            border-radius:10px;
+            text-decoration:none;
+            background:rgba(255,255,255,0.05);
+            border:1px solid rgba(255,255,255,0.15);
+            color:var(--text);
+            font-size:0.98rem;
+            transition:.25s;
+            box-shadow:0 0 10px rgba(59,130,246,0.20);
+        }
+
+        .resource-link:hover {
+            background:rgba(59,130,246,0.18);
+            transform:translateY(-2px);
+        }
+
+        /* BACK BUTTON */
+        .back-home {
+            display:inline-block;
+            margin:60px auto 80px;
+            padding:12px 26px;
+            border-radius:999px;
+            background:var(--accent);
+            color:white;
+            font-weight:600;
+            text-decoration:none;
+            box-shadow:0 0 22px rgba(59,130,246,0.55);
+            transition:.3s;
+        }
+        .back-home:hover {
+            transform:translateY(-2px);
+            box-shadow:0 0 28px rgba(59,130,246,0.85);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="animated-bg"></div>
+<div class="orb blue"></div>
+<div class="orb gold"></div>
+
+<div class="page-wrapper">
+
+    <div class="hero-tagline">WealthPath Research Guide</div>
+    <h1>Ticker Translator System</h1>
+    <p class="hero-subtitle">
+        What you want → What to search.  
+        A complete beginner-friendly cheat sheet for every investing category — stocks, ETFs, index funds, bonds, sectors, global markets, crypto, and more.
+    </p>
+
+    <hr class="blue-divider">
+
+    <!-- BEGIN ACCORDIONS -->
+
+    <!-- TOTAL U.S. MARKET -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Total U.S. Market
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>The simplest way to invest in the entire U.S. stock market — thousands of companies in one fund. Great for beginners wanting instant diversification.</p>
+
+            <div class="section-title">Common Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">VTI</span>
+                <span class="ticker">SCHB</span>
+                <span class="ticker">ITOT</span>
+            </div>
+
+            <div class="section-title">Research Using:</div>
+            <a class="resource-link" href="https://www.marketwatch.com/" target="_blank">MarketWatch</a>
+            <a class="resource-link" href="https://finance.yahoo.com/" target="_blank">Yahoo Finance</a>
+            <a class="resource-link" href="https://www.etf.com" target="_blank">ETF.com (for ETFs)</a>
+        </div>
+    </div>
+
+    <!-- S&P 500 -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            S&P 500
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Tracks the 500 largest companies in the U.S. — the core of many long-term portfolios.</p>
+
+            <div class="section-title">Common Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">VOO</span>
+                <span class="ticker">SPY</span>
+                <span class="ticker">IVV</span>
+            </div>
+
+            <div class="section-title">Research Using:</div>
+            <a class="resource-link" href="https://www.marketwatch.com/" target="_blank">MarketWatch</a>
+            <a class="resource-link" href="https://finance.yahoo.com/" target="_blank">Yahoo Finance</a>
+            <a class="resource-link" href="https://www.etf.com" target="_blank">ETF.com — ETF Details</a>
+        </div>
+    </div>
+
+    <!-- ALL-WORLD -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            All-World (Global)
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>A single fund that invests in the entire world — U.S. + international + emerging.</p>
+
+            <div class="section-title">Common Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">VT</span>
+                <span class="ticker">ACWI</span>
+            </div>
+
+            <div class="section-title">Research Using:</div>
+            <a class="resource-link" href="https://www.etf.com" target="_blank">ETF.com</a>
+            <a class="resource-link" href="https://finance.yahoo.com" target="_blank">Yahoo Finance</a>
+        </div>
+    </div>
+
+    <!-- INTERNATIONAL -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            International (Developed Markets)
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Invests in developed countries outside the U.S. (Europe, Japan, Canada, etc.).</p>
+
+            <div class="section-title">Common Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">VXUS</span>
+                <span class="ticker">VEA</span>
+                <span class="ticker">SCHF</span>
+            </div>
+
+            <div class="section-title">Research Using:</div>
+            <a class="resource-link" href="https://www.etf.com" target="_blank">ETF.com</a>
+            <a class="resource-link" href="https://finance.yahoo.com" target="_blank">Yahoo Finance</a>
+        </div>
+    </div>
+
+    <!-- EMERGING MARKETS -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Emerging Markets
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Countries with faster-growth potential (China, India, Brazil) but higher risk.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">VWO</span>
+                <span class="ticker">EEM</span>
+            </div>
+
+            <div class="section-title">Research Using:</div>
+            <a class="resource-link" href="https://www.etf.com" target="_blank">ETF.com</a>
+        </div>
+    </div>
+
+    <!-- GROWTH -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Growth Stocks / ETFs
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Fast-growing companies, usually tech-heavy. Higher upside, higher volatility.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">VUG</span>
+                <span class="ticker">QQQ</span>
+                <span class="ticker">ARKK</span>
+            </div>
+
+            <div class="section-title">Research Using:</div>
+            <a class="resource-link" href="https://finance.yahoo.com" target="_blank">Yahoo Finance</a>
+            <a class="resource-link" href="https://www.etf.com" target="_blank">ETF.com</a>
+        </div>
+    </div>
+
+    <!-- VALUE -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Value Stocks / ETFs
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Stable companies trading below their “fair value.” Often less volatile.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">VTV</span>
+                <span class="ticker">IWD</span>
+            </div>
+
+            <div class="section-title">Research Using:</div>
+            <a class="resource-link" href="https://finance.yahoo.com" target="_blank">Yahoo Finance</a>
+            <a class="resource-link" href="https://www.etf.com" target="_blank">ETF.com</a>
+        </div>
+    </div>
+
+    <!-- BLUE CHIPS -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Blue-Chip Stocks
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Large, stable, well-known companies with strong histories.</p>
+
+            <div class="section-title">Examples:</div>
+            <div class="ticker-grid">
+                <span class="ticker">AAPL</span>
+                <span class="ticker">MSFT</span>
+                <span class="ticker">JNJ</span>
+                <span class="ticker">PG</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIVIDEND -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Dividend Stocks / ETFs
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Companies that pay regular cash dividends — popular for income investors.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">SCHD</span>
+                <span class="ticker">VIG</span>
+                <span class="ticker">DVY</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SMALL CAP -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Small-Cap Stocks / ETFs
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Smaller companies with higher growth potential — but higher risk.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">IWM</span>
+                <span class="ticker">VB</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MID CAP -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Mid-Cap Stocks / ETFs
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Medium-sized companies offering a balance between growth and stability.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">VO</span>
+                <span class="ticker">MDY</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- TECHNOLOGY -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Technology Sector
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Tech companies driving innovation — high growth, higher volatility.</p>
+
+            <div class="section-title">ETFs:</div>
+            <div class="ticker-grid">
+                <span class="ticker">XLK</span>
+                <span class="ticker">VGT</span>
+            </div>
+
+            <div class="section-title">Stocks:</div>
+            <div class="ticker-grid">
+                <span class="ticker">AAPL</span>
+                <span class="ticker">MSFT</span>
+                <span class="ticker">NVDA</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI SECTOR -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            AI Stocks & ETFs
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Companies and funds focused on artificial intelligence, machine learning, and data infrastructure.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">NVDA</span>
+                <span class="ticker">GOOGL</span>
+                <span class="ticker">AI</span>
+                <span class="ticker">BOTZ</span>
+                <span class="ticker">IRBO</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEALTHCARE -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Healthcare Sector
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Pharma, biotech, hospitals, equipment — stable and long-term focused.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">XLV</span>
+                <span class="ticker">VHT</span>
+                <span class="ticker">JNJ</span>
+                <span class="ticker">UNH</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ENERGY -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Energy Sector
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Oil, gas, renewables, and energy distribution — cyclical sector.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">XLE</span>
+                <span class="ticker">VDE</span>
+                <span class="ticker">XOM</span>
+                <span class="ticker">CVX</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- FINANCIALS -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Financial Sector
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Banks, credit companies, insurance firms.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">XLF</span>
+                <span class="ticker">VFH</span>
+                <span class="ticker">JPM</span>
+                <span class="ticker">BAC</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- UTILITIES -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Utilities Sector
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Boring, steady companies providing electricity, water, gas.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">XLU</span>
+                <span class="ticker">VPU</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONSUMER STAPLES -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Consumer Staples Sector
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Companies selling essential goods — food, beverages, household products.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">XLP</span>
+                <span class="ticker">VDC</span>
+                <span class="ticker">KO</span>
+                <span class="ticker">PEP</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONSUMER DISCRETIONARY -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Consumer Discretionary Sector
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Retail, cars, travel, entertainment — things people want, not need.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">XLY</span>
+                <span class="ticker">VCR</span>
+                <span class="ticker">AMZN</span>
+                <span class="ticker">TSLA</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- INDUSTRIALS -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Industrials Sector
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Manufacturing, transportation, infrastructure, aerospace.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">XLI</span>
+                <span class="ticker">VIS</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- REAL ESTATE / REITs -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Real Estate (REITs)
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Real estate investment trusts — properties, data centers, storage, retail, industrial.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">VNQ</span>
+                <span class="ticker">XLRE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- BONDS -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Bonds
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Lower-risk investments that pay interest. Good for stability and income.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">BND</span>
+                <span class="ticker">AGG</span>
+                <span class="ticker">TLT</span>
+                <span class="ticker">TIPS</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMMODITIES -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Commodities (Gold, Oil, etc.)
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Physical assets — gold, silver, oil, agriculture. Highly cyclical.</p>
+
+            <div class="section-title">Tickers:</div>
+            <div class="ticker-grid">
+                <span class="ticker">GLD</span>
+                <span class="ticker">SLV</span>
+                <span class="ticker">DBC</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CRYPTO -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Crypto
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Digital assets — very volatile and speculative, but gaining adoption.</p>
+
+            <div class="section-title">Coins:</div>
+            <div class="ticker-grid">
+                <span class="ticker">BTC</span>
+                <span class="ticker">ETH</span>
+                <span class="ticker">SOL</span>
+            </div>
+
+            <div class="section-title">Research Using:</div>
+            <a class="resource-link" href="https://www.coinmarketcap.com" target="_blank">CoinMarketCap</a>
+            <a class="resource-link" href="https://www.coingecko.com" target="_blank">CoinGecko</a>
+        </div>
+    </div>
+
+    <!-- INDEX FUNDS -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Index Funds (Mutual Funds)
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Index funds are sold directly by brokers, not through exchanges.  
+            To explore them, you browse each broker’s website.</p>
+
+            <div class="section-title">Search Index Funds:</div>
+            <a class="resource-link" href="https://investor.vanguard.com/mutual-funds/index-funds" target="_blank">Vanguard Index Funds</a>
+            <a class="resource-link" href="https://www.fidelity.com/mutual-funds/all-index-funds/overview" target="_blank">Fidelity Index Funds</a>
+            <a class="resource-link" href="https://www.schwabassetmanagement.com/products/mutual-funds" target="_blank">Charles Schwab Index Funds</a>
+        </div>
+    </div>
+
+    <!-- MUTUAL FUNDS -->
+    <div class="accordion-card">
+        <div class="accordion-header">
+            Mutual Funds (General)
+            <span class="accordion-icon">+</span>
+        </div>
+        <div class="accordion-content">
+            <p>Professionally managed funds — they may or may not track an index.</p>
+
+            <div class="section-title">Research Using:</div>
+            <a class="resource-link" href="https://www.marketwatch.com/tools/mutual-fund/mutual-fund-lookup.asp" target="_blank">MarketWatch Mutual Fund Lookup</a>
+            <a class="resource-link" href="https://www.morningstar.com/mutual-funds" target="_blank">Morningstar Funds</a>
+        </div>
+    </div>
+
+    <!-- END ACCORDIONS -->
+
+    <a href="index.html" class="back-home">← Back to Homepage</a>
+
+</div>
+
+<script>
+    /* ACCORDION LOGIC */
+    document.querySelectorAll(".accordion-header").forEach(header => {
+        header.onclick = () => {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector(".accordion-icon");
+
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                icon.textContent = "+";
+            } else {
+                content.style.display = "block";
+                icon.textContent = "–";
+            }
+        };
+    });
+</script>
+
+</body>
+</html>
