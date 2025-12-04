@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate | WealthPath Explorer</title>
+
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0b0e12;
+            --text: #e9eef6;
+            --muted: #9aa4b2;
+            --accent: #3b82f6;
+            --border: rgba(255,255,255,0.12);
+            --card-bg: rgba(255,255,255,0.06);
+        }
+
+        /* GLOBAL */
+        * {margin:0; padding:0; box-sizing:border-box;}
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.65;
+            overflow-x: hidden;
+        }
+
+        /* BACKGROUND */
+        .animated-bg {
+            position: fixed;
+            inset: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 25% 15%, #0f172a, #0b0e12 80%);
+            z-index: -2;
+        }
+
+        .orb {
+            position: fixed;
+            width: 300px; height: 300px;
+            border-radius: 50%;
+            filter: blur(130px);
+            opacity: 0.32;
+            animation: float 11s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+        .orb.blue { background:#3b82f6; top:18%; left:12%; }
+        .orb.gold { background:#facc15; bottom:10%; right:10%; }
+
+        @keyframes float {
+            from { transform: translateY(0); }
+            to { transform: translateY(-35px); }
+        }
+
+        /* WRAPPER */
+        .page-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 110px 22px 70px;
+        }
+
+        h1 {
+            font-family:'Montserrat',sans-serif;
+            font-size:2.6rem;
+            font-weight:800;
+            text-align:center;
+            margin-bottom:15px;
+        }
+
+        .page-subtitle {
+            font-size:1.08rem;
+            color:var(--muted);
+            max-width:650px;
+            margin:0 auto 30px;
+            text-align:center;
+        }
+
+        .blue-divider {
+            width:130px;
+            border:0;
+            border-top:2px solid var(--accent);
+            margin:22px auto 40px;
+            opacity:0.85;
+            border-radius:2px;
+            box-shadow:0 0 12px rgba(59,130,246,0.45);
+        }
+
+        /* CARD */
+        .card {
+            background:var(--card-bg);
+            padding:22px 22px 28px;
+            border-radius:18px;
+            border:1px solid rgba(255,255,255,0.09);
+            margin-bottom:26px;
+            box-shadow:
+                0 0 16px rgba(59,130,246,0.25),
+                0 0 6px rgba(0,0,0,0.7);
+        }
+
+        .card h2 {
+            font-family:'Montserrat',sans-serif;
+            font-size:1.35rem;
+            margin-bottom:10px;
+        }
+
+        .card p, .card li {
+            color:var(--muted);
+            font-size:1rem;
+            margin-bottom:10px;
+        }
+
+        ul { padding-left:20px; }
+        li { margin-bottom:8px; }
+
+        .risk-box {
+            font-size:1.05rem;
+            font-weight:600;
+            color:#fff;
+            background:rgba(59,130,246,0.2);
+            padding:8px 14px;
+            display:inline-block;
+            border-radius:8px;
+            border:1px solid rgba(59,130,246,0.4);
+            margin-top:10px;
+        }
+
+        .ticker-grid span {
+            display:inline-block;
+            background:rgba(255,255,255,0.07);
+            padding:6px 10px;
+            border-radius:6px;
+            border:1px solid rgba(255,255,255,0.1);
+            margin:4px;
+            color:#fff;
+            font-size:0.95rem;
+        }
+
+        /* NAV BAR COPIED EXACTLY FROM STOCKS PAGE */
+        .fixed-header {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(11,14,18,0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 26px;
+            z-index: 1000;
+            transform: translateY(-100%);
+            transition: transform .38s ease-out, border-bottom .38s ease;
+        }
+        .fixed-header.scrolled {
+            transform: translateY(0);
+            border-bottom:1px solid rgba(59,130,246,0.4);
+        }
+
+        .logo-mixed {
+            display:flex;
+            align-items:center;
+            gap:8px;
+            text-decoration:none;
+        }
+        .logo-orb {
+            width:40px;
+            height:40px;
+            filter: drop-shadow(0 0 6px #3b82f6);
+        }
+        .logo-text {
+            font-family:'Montserrat';
+            font-size:1.25rem;
+            font-weight:800;
+            color:#e9eef6;
+        }
+
+        .menu-btn {
+            width:26px;
+            height:22px;
+            display:flex;
+            flex-direction:column;
+            justify-content:space-between;
+            cursor:pointer;
+        }
+        .menu-btn span {
+            width:100%;
+            height:2.5px;
+            background:#fff;
+            border-radius:4px;
+            transition:.3s;
+        }
+
+        .menu-btn.active span:nth-child(1) { transform: translateY(10px) rotate(45deg);}
+        .menu-btn.active span:nth-child(2) { opacity:0;}
+        .menu-btn.active span:nth-child(3) { transform: translateY(-10px) rotate(-45deg);}
+
+        .mobile-menu {
+            position:fixed;
+            top:0; right:-280px;
+            width:280px; height:100vh;
+            background:rgba(11,14,18,0.92);
+            backdrop-filter:blur(10px);
+            border-left:1px solid rgba(255,255,255,0.08);
+            padding:80px 25px;
+            overflow-y:auto;
+            z-index:2000;
+            transition:right .35s ease;
+        }
+        .mobile-menu.open { right:0; }
+
+        .menu-close {
+            position:absolute;
+            top:18px; right:18px;
+            color:#fff;
+            font-size:1.9rem;
+            cursor:pointer;
+        }
+
+        .menu-title {
+            text-align:center;
+            font-family:'Montserrat';
+            font-size:1.15rem;
+            font-weight:700;
+            color:#fff;
+            margin-bottom:22px;
+        }
+
+        .menu-title-underline {
+            position:relative;
+            width:60%;
+            height:2px;
+            margin:8px auto 25px;
+            background:linear-gradient(90deg, rgba(59,130,246,0), rgba(59,130,246,0.8), rgba(59,130,246,0));
+            border-radius:2px;
+            overflow:hidden;
+            box-shadow:0 0 8px rgba(59,130,246,0.6);
+        }
+
+        .menu-title-underline::after {
+            content:"";
+            position:absolute;
+            top:0; left:-40%;
+            width:40%; height:100%;
+            background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.9), rgba(255,255,255,0));
+            transform:skewX(-20deg);
+            opacity:.7;
+            animation: shimmerSweep 2.8s infinite ease-in-out;
+        }
+
+        @keyframes shimmerSweep {
+            0% {left:-40%; opacity:0;}
+            30% {opacity:.7;}
+            50% {left:100%; opacity:1;}
+            70% {opacity:.4;}
+            100% {left:120%; opacity:0;}
+        }
+
+        .menu-item {
+            display:block;
+            padding:14px 18px;
+            margin-bottom:14px;
+            color:#fff;
+            background:rgba(255,255,255,0.03);
+            border:1px solid rgba(255,255,255,0.05);
+            border-radius:12px;
+            font-size:1.05rem;
+            text-decoration:none;
+            transition:.25s;
+        }
+        .menu-item:hover {
+            background:rgba(59,130,246,0.12);
+            border-color:var(--accent);
+            transform:translateX(4px);
+        }
+    </style>
+</head>
+
+<body>
+
+<header id="fixedHeader" class="fixed-header">
+    <a href="https://mywealthpath.org" class="logo-mixed">
+        <img src="images/logo-orb.png" class="logo-orb" alt="logo">
+        <span class="logo-text">WealthPath</span>
+    </a>
+
+    <div id="menuBtn" class="menu-btn">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+    <div class="menu-close" onclick="toggleMenu()">✕</div>
+
+    <div class="menu-title">WealthPath Menu</div>
+    <div class="menu-title-underline"></div>
+
+    <a href="index.html" class="menu-item">🏠 Explorer Home</a>
+    <a href="research.html" class="menu-item">🔍 Research Hub</a>
+    <a href="stocks.html" class="menu-item">📈 Stocks</a>
+    <a href="etfs.html" class="menu-item">📊 ETFs</a>
+    <a href="index-funds.html" class="menu-item">📘 Index Funds</a>
+    <a href="mutual-funds.html" class="menu-item">📗 Mutual Funds</a>
+    <a href="bonds.html" class="menu-item">💵 Bonds</a>
+    <a href="commodities.html" class="menu-item">🌾 Commodities</a>
+    <a href="crypto.html" class="menu-item">🪙 Crypto</a>
+
+    <div style="height:25px;"></div>
+
+    <a href="https://mywealthpath.org#tools" class="menu-item">🧰 Learning Toolkit</a>
+    <a href="https://mywealthpath.org/privacy.html" class="menu-item">🔒 Privacy Policy</a>
+    <a href="https://mywealthpath.org/terms.html" class="menu-item">📄 Terms of Use</a>
+    <a href="mailto:info@mywealthpath.org" class="menu-item">✉️ Contact Us</a>
+</div>
+
+<div class="animated-bg"></div>
+<div class="orb blue"></div>
+<div class="orb gold"></div>
+
+<div class="page-wrapper">
+
+    <h1>Real Estate</h1>
+    <p class="page-subtitle">
+        Real estate provides income, potential appreciation, and stability.  
+        This guide breaks down physical property, REITs, risks, and how real estate
+        fits into a balanced portfolio.
+    </p>
+
+    <hr class="blue-divider">
+
+    <!-- WHAT IT IS -->
+    <div class="card">
+        <h2>What It Is</h2>
+        <p>
+            Real estate includes physical property — homes, rentals, apartments, storage units —
+            AND REITs (Real Estate Investment Trusts), which let you invest in real estate without
+            owning property directly.
+        </p>
+        <p>
+            Whether physical or digital, real estate often behaves differently than stocks, adding
+            stability and income to long-term portfolios.
+        </p>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="card">
+        <h2>How It Works</h2>
+        <p>Real estate builds wealth in three main ways:</p>
+
+        <ul>
+            <li><strong>Rental Income:</strong> Tenants pay you monthly cash flow.</li>
+            <li><strong>Appreciation:</strong> Property values rise over long periods.</li>
+            <li><strong>REIT Dividends:</strong> REIT companies pay out income regularly.</li>
+        </ul>
+
+        <p>
+            Real estate is income-focused. Even when prices dip, rental income often continues.
+        </p>
+    </div>
+
+    <!-- PROS -->
+    <div class="card">
+        <h2>Pros</h2>
+        <ul>
+            <li>✔ Provides steady income through rent or REIT dividends</li>
+            <li>✔ Often less correlated with stock market volatility</li>
+            <li>✔ Strong long-term appreciation in many markets</li>
+            <li>✔ REITs offer real estate exposure without maintenance</li>
+            <li>✔ Helps diversify a stock-heavy portfolio</li>
+        </ul>
+    </div>
+
+    <!-- CONS -->
+    <div class="card">
+        <h2>Cons</h2>
+        <ul>
+            <li>✘ Physical property requires maintenance, taxes, and management</li>
+            <li>✘ Illiquid — property cannot be sold instantly</li>
+            <li>✘ REITs can still be affected by interest rates</li>
+            <li>✘ Leverage (mortgages) increases risk</li>
+        </ul>
+    </div>
+
+    <!-- RISK -->
+    <div class="card">
+        <h2>Risk Level</h2>
+        <p class="risk-box">⭐️⭐️ (Low–Medium Risk)</p>
+        <p>
+            Real estate is more stable than stocks but still reacts to interest rates,
+            regional demand, and economic cycles.  
+            REITs fluctuate like stocks but provide consistent income.
+        </p>
+    </div>
+
+    <!-- WHAT TYPES -->
+    <div class="card">
+        <h2>Main Types of Real Estate Investments</h2>
+        <ul>
+            <li><strong>Physical Property:</strong> Single-family homes, apartments, storage units, land.</li>
+            <li><strong>Equity REITs:</strong> Own and operate properties (most common).</li>
+            <li><strong>Mortgage REITs:</strong> Invest in loans, more volatile.</li>
+            <li><strong>Hybrid REITs:</strong> Mix of property + mortgages.</li>
+        </ul>
+    </div>
+
+    <!-- TICKERS -->
+    <div class="card">
+        <h2>Popular REIT Tickers</h2>
+
+        <div style="
+            margin:25px 0;
+            padding:16px 18px;
+            background:rgba(255,255,255,0.04);
+            border:1px solid rgba(255,255,255,0.12);
+            border-radius:14px;
+            box-shadow:0 0 12px rgba(59,130,246,0.20);
+            color:var(--muted);
+            font-size:0.95rem;
+        ">
+            <strong style="color:var(--accent);">🔎 Pro Tip:</strong>
+            Search each ticker and read what properties they own, their dividend history,
+            and long-term growth strategy.  
+            Real estate rewards patience and consistency.
+        </div>
+
+        <h3 style="margin-top:15px;">📌 Broad Real Estate REITs</h3>
+        <div class="ticker-grid">
+            <span>VNQ</span><span>SCHH</span><span>IYR</span><span>XLRE</span>
+        </div>
+
+        <h3 style="margin-top:20px;">📌 Residential</h3>
+        <div class="ticker-grid">
+            <span>AVB</span><span>EQR</span><span>ESS</span><span>UDR</span>
+        </div>
+
+        <h3 style="margin-top:20px;">📌 Commercial</h3>
+        <div class="ticker-grid">
+            <span>SPG</span><span>KIM</span><span>FRT</span>
+        </div>
+
+        <h3 style="margin-top:20px;">📌 Industrial / Warehousing</h3>
+        <div class="ticker-grid">
+            <span>PLD</span><span>STAG</span><span>TRNO</span>
+        </div>
+
+        <h3 style="margin-top:20px;">📌 Data Centers (fastest-growing REITs)</h3>
+        <div class="ticker-grid">
+            <span>EQIX</span><span>DLR</span><span>COR</span>
+        </div>
+
+        <h3 style="margin-top:20px;">📌 Specialty REITs</h3>
+        <div class="ticker-grid">
+            <span>O</span><span>ARE</span><span>AMT</span><span>CCI</span>
+        </div>
+
+    </div>
+
+</div>
+<div style="text-align:center; margin-top:50px; margin-bottom:80px;">
+
+    <!-- Previous: Crypto -->
+    <a href="crypto.html"
+       style="
+            display:inline-block;
+            margin:0 18px;
+            padding:12px 26px;
+            border-radius:30px;
+            background:rgba(255,255,255,0.08);
+            border:1px solid rgba(255,255,255,0.15);
+            color:var(--accent);
+            font-size:1rem;
+            font-weight:600;
+            text-decoration:none;
+            transition:0.25s ease;
+            box-shadow:
+                0 0 6px rgba(59,130,246,0.35),
+                inset 0 0 6px rgba(255,255,255,0.05);
+       "
+       onmouseover="this.style.boxShadow='0 0 18px rgba(59,130,246,0.7), 0 0 10px rgba(59,130,246,0.45)'"
+       onmouseout="this.style.boxShadow='0 0 6px rgba(59,130,246,0.35), inset 0 0 6px rgba(255,255,255,0.05)'"
+    >
+       ← Crypto
+    </a>
+
+    <!-- Next: Research Hub -->
+    <a href="research.html"
+       style="
+            display:inline-block;
+            margin:0 18px;
+            padding:12px 26px;
+            border-radius:30px;
+            background:rgba(255,255,255,0.08);
+            border:1px solid rgba(255,255,255,0.15);
+            color:var(--accent);
+            font-size:1rem;
+            font-weight:600;
+            text-decoration:none;
+            transition:0.25s ease;
+            box-shadow:
+                0 0 6px rgba(59,130,246,0.35),
+                inset 0 0 6px rgba(255,255,255,0.05);
+       "
+       onmouseover="this.style.boxShadow='0 0 18px rgba(59,130,246,0.7), 0 0 10px rgba(59,130,246,0.45)'"
+       onmouseout="this.style.boxShadow='0 0 6px rgba(59,130,246,0.35), inset 0 0 6px rgba(255,255,255,0.05)'"
+    >
+       Research Hub →
+    </a>
+
+</div>
+
+<script>
+function handleScrollGlow() {
+    const header = document.getElementById("fixedHeader");
+    if (window.scrollY > 150) header.classList.add("scrolled");
+    else header.classList.remove("scrolled");
+}
+window.addEventListener("scroll", handleScrollGlow);
+
+// Menu toggle
+function toggleMenu() {
+    const menu = document.getElementById("mobileMenu");
+    const body = document.body;
+    const btn = document.getElementById("menuBtn");
+
+    menu.classList.toggle("open");
+    btn.classList.toggle("active");
+
+    if (menu.classList.contains("open")) body.style.overflow = "hidden";
+    else body.style.overflow = "";
+}
+
+document.getElementById("menuBtn").addEventListener("click", toggleMenu);
+</script>
+
+</body>
+</html>
